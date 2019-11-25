@@ -1,0 +1,93 @@
+
+
+<div class="row">
+    
+
+    <div class="col-md-8">
+
+
+        <!-- A5 paper size -->
+        <!--
+            Equivalent A5 paper dimensions in pixels at 300 DPI and 72 DPI respectively are: 
+            1748 pixels x 2480 pixels (print resolution) 
+            420 pixels x 595 pixels (screen resolution)
+        -->
+        <canvas id="badgeCanvas" width="559" height="794" ></canvas>
+        
+        {{#if showBarcode}}
+        <img id="barcode" src="/images/barcode.png" style="display: none" >
+        {{/if}}
+
+
+    </div>
+
+</div>
+
+
+<script src="/library/jquery-3.3.1.min.js"></script>
+<script src="/library/fabric.min.js"></script>
+<script src="/library/JsBarcode.all.min.js"></script>
+
+<script>
+
+var fields = [];
+var canvas = new fabric.Canvas('badgeCanvas');
+
+
+
+$(document).ready(function(){
+    /*
+    JsBarcode("#barcode", "19299259221626", {
+    format: "CODE128",
+    width: 1,
+    height:40,
+    margin: 5,
+    textMargin: 0,
+    fontSize: 10,
+    displayValue: true
+    });
+    */
+    
+    var topIndex=0;
+
+    {{#each fields}}
+    topIndex = {{@index}};
+
+    var {{this.fieldName}} = new fabric.Textbox('{{toUpperCase this.fieldLabel}}', {
+        left: {{this.fieldLeft}},
+        top: {{this.fieldTop}},
+        width: {{this.fieldWidth}},
+        angle: 0,
+        opacity: 1,
+        fontFamily: '{{this.fieldFontFamily}}',
+        fontSize: {{this.fieldFontSize}},
+        fontWeight: '{{this.fieldFontWeight}}',
+        fontStyle: '{{this.fieldFontStyle}}',
+        textAlign: '{{this.fieldTextAlign}}'
+        });
+
+    canvas.add({{this.fieldName}}); 
+    fields.push('{{this.fieldName}}');
+
+    {{/each}}
+
+    {{#if showBarcode}}
+        topIndex = topIndex + 100;
+        var imgElement = document.getElementById('barcode');
+        var imgInstance = new fabric.Image(imgElement, {
+        left: {{barcodeLeft}},
+        top: {{barcodeTop}},
+        angle: 0,
+        opacity: 1
+        });
+        canvas.add(imgInstance);
+        fields.push('barcode');
+    {{/if}}
+
+    window.print();
+      
+    setTimeout(function(){ window.close(); }, 500);
+});
+
+      
+</script>
