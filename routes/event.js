@@ -862,7 +862,7 @@ router.post('/edit-registration', function (req, res) {
 router.get('/download/:id', function(req,res){
     var eventId = req.params.id;
     req.session.eventId = eventId;
-    /*
+    
     var messages = [];
     
         var eventId = req.params.id;
@@ -890,8 +890,8 @@ router.get('/download/:id', function(req,res){
             res.xls('data.xlsx', rows);
            
         });
-        */
         
+        /*
         var kue = require('kue');
         var queue = kue.createQueue({
             redis: process.env.REDIS_URL
@@ -925,7 +925,7 @@ router.get('/download/:id', function(req,res){
           });
 
         res.redirect('/event/export-files');
-         
+         */
 
 });
 
