@@ -859,361 +859,6 @@ router.post('/edit-registration', function (req, res) {
 
 });
 
-router.get('/download2/:id', function(req,res){
-    var eventId = req.params.id;
-    req.session.eventId = eventId;
-    
-    var messages = [];
-    
-        var eventId = req.params.id;
-        req.session.eventId = eventId;
-
-    
-        EventData.find({event:eventId}, function(err, eventData){
-            if(err) throw err;
-    
-            var rows=[];
-            eventData.forEach(function(eventData){
-    
-                var row={};
-                var keys = Object.keys(eventData.toJSON());
-                for(var i=keys.length-1; i>0; i--){
-                    if(keys[i]!='__v' && keys[i]!='_id' && keys[i]!='event')
-                    row[keys[i]]=eventData[keys[i]];
-                }
-
-                rows.push(row);
-                
-            });
-            
-            
-            res.xls('data.xlsx', rows);
-           
-        });
-        
-        /*
-        var kue = require('kue');
-        var queue = kue.createQueue({
-            redis: process.env.REDIS_URL
-          });
-
-          let job = queue.create('myQueue', {
-            from: 'process1',
-            type: 'testMessage',
-            data: {
-              msg: 'Hello world!',
-              eventId: eventId,
-              //exportFileId: result._id
-            }
-          }).save((err) => {
-           if (err) throw err;
-           console.log(`Job ${job.id} saved to the queue.`);
-          });
-
-          queue.on('job complete', (id, result) => {
-            kue.Job.get(id, (err, job) => {
-              if (err) throw err;
-              job.remove((err) => {
-                if (err) throw err;
-                console.log(`Removed completed job ${job.id}`);
-              });
-            });
-          });
-
-          queue.process('myQueue', function(job, done){
-            processJob(job.data,job.id, done);
-          });
-
-        res.redirect('/event/export-files');
-         */
-
-});
-
-function processJob(data,jobId, callback) {
-    switch (data.from) {
-      case 'process1':
-        switch (data.type) {
-          case 'testMessage':
-            handleExportJob(data.data,jobId, callback);
-            break;
-          case 'testMessage2':
-            handleExportJob2(data.data,jobId, callback);
-            break;
-          default:
-            callback();
-        }
-        break;
-      default:
-        callback();
-    }
-  }
-
-function handleExportJob(data,jobId, callback){
-
-    ExportFiles.remove({event:data.eventId}, function(err){
-        if(err) throw err;
-
-        var ef = new ExportFiles();
-        ef.event=data.eventId;
-        ef.filename='Report.xlsx';
-        ef.creationDate=moment().format('YYYY-MM-DD HH:mm:ss');
-        ef.rowCount = 0;
-        ef.isCompleted = false;
-
-        ef.save(function(err, result){
-            if(err) throw err;
-
-          
-
-            prepareExcel(data,jobId, callback);
-
-        });
-    });
-
-
-}
-
-function prepareExcel(data,jobId, callback){
-    const excel = require('node-excel-export');
-    // You can define styles as json object 
-    // More info: https://github.com/protobi/js-xlsx#cell-styles 
-    const styles = {
-        headerDark: {
-        fill: {
-            fgColor: {
-            rgb: 'FF000000'
-            }
-        },
-        font: {
-            color: {
-            rgb: 'FFFFFFFF'
-            },
-            sz: 14,
-            bold: true,
-            underline: true
-        }
-        },
-        cellPink: {
-        fill: {
-            fgColor: {
-            rgb: 'FFFFCCFF'
-            }
-        }
-        },
-        cellGreen: {
-        fill: {
-            fgColor: {
-            rgb: 'FF00FF00'
-            }
-        }
-        }
-    };
-
-    //Array of objects representing heading rows (very top) 
-    const heading = [
-        [{value: 'a1', style: styles.headerDark}, {value: 'b1', style: styles.headerDark}, {value: 'c1', style: styles.headerDark}],
-        ['a2', 'b2', 'c2'] // <-- It can be only values 
-    ];
-
-    //Here you specify the export structure 
-    const specification = {
-        uniqueId: {displayName: 'Unique Id', headerStyle: styles.headerDark, width: 120},
-        barcode: {displayName: 'Barcode', headerStyle: styles.headerDark, width: 120},
-        sno: {displayName: 'SNo', headerStyle: styles.headerDark, width: 120},
-        title: {displayName: 'Title', headerStyle: styles.headerDark, width: 120},
-        firstName: {displayName: 'First Name', headerStyle: styles.headerDark, width: 120},
-        middleName: {displayName: 'Middle Name', headerStyle: styles.headerDark, width: 120},
-        lastName: {displayName: 'Last Name', headerStyle: styles.headerDark, width: 120},
-        fullName: {displayName: 'Full Name', headerStyle: styles.headerDark, width: 120},
-        jobTitle: {displayName: 'Job Title', headerStyle: styles.headerDark, width: 120},
-        department: {displayName: 'Department', headerStyle: styles.headerDark, width: 120},
-        companyName: {displayName: 'Company Name', headerStyle: styles.headerDark, width: 120},
-        mobile1: {displayName: 'Mobile 1', headerStyle: styles.headerDark, width: 120},
-        mobile2: {displayName: 'Mobile 2', headerStyle: styles.headerDark, width: 120},
-        tel1: {displayName: 'Tel 1', headerStyle: styles.headerDark, width: 120},
-        tel2: {displayName: 'Tel 2', headerStyle: styles.headerDark, width: 120},
-        fax: {displayName: 'Fax', headerStyle: styles.headerDark, width: 120},
-        email: {displayName: 'Email', headerStyle: styles.headerDark, width: 120},
-        website: {displayName: 'Website', headerStyle: styles.headerDark, width: 120},
-        address1: {displayName: 'Address 1', headerStyle: styles.headerDark, width: 120},
-        address2: {displayName: 'Address 2', headerStyle: styles.headerDark, width: 120},
-        city: {displayName: 'City', headerStyle: styles.headerDark, width: 120},
-        country: {displayName: 'Country', headerStyle: styles.headerDark, width: 120},
-        poBox: {displayName: 'P.O.Box', headerStyle: styles.headerDark, width: 120},
-        postalCode: {displayName: 'Postal Code', headerStyle: styles.headerDark, width: 120},
-        badgeCategory: {displayName: 'Badge Category', headerStyle: styles.headerDark, width: 120},
-        regType: {displayName: 'Reg Type', headerStyle: styles.headerDark, width: 120},
-        regDate: {displayName: 'Reg Date', headerStyle: styles.headerDark, width: 120},
-        badgePrintDate: {displayName: 'Badge Print Date', headerStyle: styles.headerDark, width: 120},
-        modifiedDate: {displayName: 'Modified Date', headerStyle: styles.headerDark, width: 120},
-        statusFlag: {displayName: 'Status Flag', headerStyle: styles.headerDark, width: 120},
-        backoffice: {displayName: 'Back Office', headerStyle: styles.headerDark, width: 120},
-        comment1: {displayName: 'Comment 1', headerStyle: styles.headerDark, width: 120},
-        comment2: {displayName: 'Comment 2', headerStyle: styles.headerDark, width: 120},
-        comment3: {displayName: 'Comment 3', headerStyle: styles.headerDark, width: 120},
-        comment4: {displayName: 'Comment 4', headerStyle: styles.headerDark, width: 120},
-        comment5: {displayName: 'Comment 5', headerStyle: styles.headerDark, width: 120},
-        comment6: {displayName: 'Comment 6', headerStyle: styles.headerDark, width: 120},
-        comment7: {displayName: 'Comment 7', headerStyle: styles.headerDark, width: 120},
-        comment8: {displayName: 'Comment 8', headerStyle: styles.headerDark, width: 120},
-        comment9: {displayName: 'Comment 9', headerStyle: styles.headerDark, width: 120},
-        comment10: {displayName: 'Comment 10', headerStyle: styles.headerDark, width: 120},
-        username: {displayName: 'Username', headerStyle: styles.headerDark, width: 120},
-        
-    }
-
-    // The data set should have the following shape (Array of Objects) 
-    // The order of the keys is irrelevant, it is also irrelevant if the 
-    // dataset contains more fields as the report is build based on the 
-    // specification provided above. But you should have all the fields 
-    // that are listed in the report specification 
-
-    EventData.find({event:data.eventId}, function(err, eventData){
-        if(err) throw err;
-
-        const dataset = [
-            {customer_name: 'IBM', status_id: 1, note: 'some note', misc: 'not shown'},
-            {customer_name: 'HP', status_id: 0, note: 'some note'},
-            {customer_name: 'MS', status_id: 0, note: 'some note', misc: 'not shown'}
-        ]
-  
-        // Define an array of merges. 1-1 = A:1 
-        // The merges are independent of the data. 
-        // A merge will overwrite all data _not_ in the top-left cell. 
-        const merges = [
-            { start: { row: 1, column: 1 }, end: { row: 1, column: 10 } },
-            { start: { row: 2, column: 1 }, end: { row: 2, column: 5 } },
-            { start: { row: 2, column: 6 }, end: { row: 2, column: 10 } }
-        ]
-  
-
-        // Create the excel report. 
-        // This function will return Buffer 
-        const report = excel.buildExport(
-            [ // <- Notice that this is an array. Pass multiple sheets to create multi sheet report 
-            {
-                name: 'Report', // <- Specify sheet name (optional) 
-                //heading: heading, // <- Raw heading array (optional) 
-                //merges: merges, // <- Merge cell ranges 
-                specification: specification, // <- Report specification 
-                data: eventData // <-- Report data 
-            }
-            ]
-        );
-  
-        // You can then return this straight 
-        //res.attachment('report.xlsx'); // This is sails.js specific (in general you need to set headers) 
-        //return res.send(report);
-        
-        // OR you can save this buffer to the disk by creating a file.
-        var newpath = path.join(__dirname, '../public/uploads/') + 'Report.xlsx';
-
-        fs.writeFile(newpath, report, function(err) {
-
-                if(err) throw err;
-    
-                var query = {event:data.eventId};
-                var currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
-                var update = {isCompleted:true, rowCount:eventData.length};
-                var options = {new:true};
-            
-                ExportFiles.findOneAndUpdate(query, update, options, function(err, eventData){
-                    //if(err) throw err;
-                    
-                    console.log(`Process1 wants me to say: "${data.eventId}"`);
-                    callback();
-                   
-                });
-    
-    
-    
-    
-
-          }); 
-
-    });
-
-}
-
-function prepareExcel2(data,jobId, callback) {
-
-    //excel stuff starts
-    var xl = require('excel4node');
-    var wb = new xl.Workbook();
-    var ws = wb.addWorksheet('Sheet 1');
-    var style = wb.createStyle({
-        font: {
-            color: '#FF0800',
-            size: 12
-        },
-        numberFormat: '$#,##0.00; ($#,##0.00); -'
-    });
-    //excel stuff ends
-
-    EventData.find({event:data.eventId}, function(err, eventData){
-        if(err) throw err;
-
-        //var rows=[];
-        var rows=0;
-        eventData.forEach(function(eventData){
-
-            var row={};
-            var keys = Object.keys(eventData.toJSON());
-            for(var i=keys.length-1; i>0; i--){
-                if(keys[i]!='__v' && keys[i]!='_id' && keys[i]!='event'){
-                    //row[keys[i]]=eventData[keys[i]];
-                    ws.cell(rows + 1, i + 1).string(eventData[keys[i]]).style(style);
-                }
-
-            }
-            rows++;
-            //rows.push(row);
-
-             
-            
-
-        });
-        var newpath = path.join(__dirname, '../public/uploads/') + 'Report.xlsx';
-        wb.write(newpath);
-        
-        //wb.writeToBuffer().then(function (buffer) {
-            // Do something with buffer
-
-            //fs.writeFile(newpath, buffer, function(err) {
-
-                //Event.find({event:data.eventId}, function(err, event){
-                    if(err) throw err;
-        
-                    var query = {event:data.eventId};
-                    var currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
-                    var update = {isCompleted:true, rowCount:eventData.length};
-                    var options = {new:true};
-                
-                    ExportFiles.findOneAndUpdate(query, update, options, function(err, eventData){
-                        //if(err) throw err;
-                        
-                        console.log(`Process1 wants me to say: "${data.eventId}"`);
-                        callback();
-                       
-                    });
-        
-        
-        
-        
-                //});
-    
-              //}); 
-        //});
-
-
-
-    });
-
-};
-
- 
-  
-
 
 
 router.get('/download/:id', function(req,res){
@@ -1306,7 +951,7 @@ router.get('/download/:id', function(req,res){
             comment8: {displayName: 'Comment 8', headerStyle: styles.headerDark, width: 120},
             comment9: {displayName: 'Comment 9', headerStyle: styles.headerDark, width: 120},
             comment10: {displayName: 'Comment 10', headerStyle: styles.headerDark, width: 120},
-
+            username: {displayName: 'Username', headerStyle: styles.headerDark, width: 120},
             
         }
   
@@ -1398,15 +1043,21 @@ router.get('/upload/:id', function (req, res) {
 });
 
 router.post('/upload', function(req,res){
-
+    var messages = [];
     var eventId = req.session.eventId;
 
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
 
+        if(files.filetoupload==null || files.filetoupload.name==''){
+            messages.push('Please select a file to upload');
+            res.render('event/upload', { messages: messages, hasErrors: messages.length > 0 });
+            return;
+        }
+
         var oldpath = files.filetoupload.path;
-        //var newpath = path.join(__dirname, '../uploads/') + files.filetoupload.name;
-        var newpath = path.join(__dirname, '../public/uploads/') + 'Report.xlsx';
+        var newpath = path.join(__dirname, '../uploads/') + files.filetoupload.name;
+        //var newpath = path.join(__dirname, '../public/uploads/') + 'Report.xlsx';
 
 
         // Read the file
@@ -1419,49 +1070,22 @@ router.post('/upload', function(req,res){
             fs.writeFile(newpath, data, function (err) {
                 if (err) throw err;
 
-                var kue = require('kue');
-                var queue = kue.createQueue({
-                    redis: process.env.REDIS_URL
-                  });
-            
-                  let job = queue.create('myQueue', {
-                    from: 'process1',
-                    type: 'testMessage2',
-                    data: {
-                      msg: 'Hello world2!',
-                      eventId: eventId,
-                      filename:files.filetoupload.name,
-                      newpath:newpath
-                    }
-                  }).save((err) => {
-                   if (err) throw err;
-                   console.log(`Job ${job.id} saved to the queue.`);
-                  });
-            
-                  queue.on('job complete', (id, result) => {
-                    kue.Job.get(id, (err, job) => {
-                      if (err) throw err;
-                      job.remove((err) => {
-                        if (err) throw err;
-                        console.log(`Removed completed job ${job.id}`);
-                      });
-                    });
-                  });
-            
-                  queue.process('myQueue', function(job, done){
-                    processJob(job.data,job.id, done);
-                  });
-            
-                res.redirect('/event/import-files');
+                var data = {eventId:eventId, newpath:newpath};
+                importExcel(data, function(){
+                    res.redirect('/event');
+                });
+
+
+ 
 
 
 
             });
             // Delete the file
-            //fs.unlink(oldpath, function (err) {
-            //    if (err) throw err;
-            //    console.log('File deleted!');
-            //});
+            fs.unlink(oldpath, function (err) {
+               if (err) throw err;
+               console.log('File deleted!');
+            });
 
 
 
@@ -1476,36 +1100,8 @@ router.post('/upload', function(req,res){
   
 });
 
-function handleExportJob2(data, jobId, callback){
 
-    ExportFiles.remove({event:data.eventId}, function(err){
-        if(err) throw err;
-
-        var ef = new ExportFiles();
-        ef.event=data.eventId;
-        ef.filename=data.filename;
-        ef.creationDate=moment().format('YYYY-MM-DD HH:mm:ss');
-        ef.rowCount = 0;
-        ef.isCompleted = false;
-
-        ef.save(function(err, result){
-            if(err) throw err;
-
-          
-            importExcel(data,jobId, callback);
-            
-
-        });
-    });
-
-
-    
-
-
-
-}
-
-function importExcel(data,jobId, callback){
+function importExcel(data,callback){
 
     var workbook = XLSX.readFile(data.newpath);
     var sheet_name_list = workbook.SheetNames;
@@ -1597,8 +1193,6 @@ function importExcel(data,jobId, callback){
 
 
 }
-
-
 
 
 
