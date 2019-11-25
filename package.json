@@ -25,7 +25,7 @@
     "kue": "^0.11.6",
     "memory-cache": "^0.2.0",
     "moment": "^2.19.2",
-    "mongoose": "^4.13.4",
+    "mongoose": "^5.7.12",
     "morgan": "~1.9.0",
     "node-excel-export": "^1.4.2",
     "passport": "^0.4.0",
