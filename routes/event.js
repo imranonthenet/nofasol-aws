@@ -859,7 +859,7 @@ router.post('/edit-registration', function (req, res) {
 
 });
 
-router.get('/download/:id', function(req,res){
+router.get('/download2/:id', function(req,res){
     var eventId = req.params.id;
     req.session.eventId = eventId;
     
@@ -1216,7 +1216,7 @@ function prepareExcel2(data,jobId, callback) {
 
 
 
-router.get('/download2/:id', function(req,res){
+router.get('/download/:id', function(req,res){
     var messages = [];
     
         var eventId = req.params.id;
