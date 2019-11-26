@@ -1,7 +1,7 @@
 var spawn = require('child_process').spawn;
 
 collection.insert(docs, {safe:true}, function(err, result) {
-    var args = ['--db', 'heroku_141w6cdm']
+    var args = ['--db', 'heroku_141w6cdm', '--collection','events']
       , mongodump = spawn('/usr/local/bin/mongodump', args);
     mongodump.stdout.on('data', function (data) {
       console.log('stdout: ' + data);
