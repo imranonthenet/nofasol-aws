@@ -1,5 +1,5 @@
-var spawn = require('child_process').spawn;
-
+const spawn = require('child_process').spawn;
+const compressing = require('compressing');
 
     var args = []
       , mongodump = spawn('mongodump', args);
@@ -12,7 +12,7 @@ var spawn = require('child_process').spawn;
     mongodump.on('exit', function (code) {
       console.log('mongodump exited with code ' + code);
 
-      const compressing = require('compressing');
+      
         compressing.tar.compressDir('dump', 'dump.tar')
         .then(function(){
             console.log('compression done');
