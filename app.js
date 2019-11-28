@@ -49,6 +49,7 @@ require('./config/passport');
 var index = require('./routes/index');
 var userRoutes = require('./routes/user');
 var eventRoutes = require('./routes/event');
+var backupRoutes = require('./routes/backup');
 
 
 var app = express();
@@ -255,6 +256,7 @@ app.use(function(req,res,next){
 app.use('/user', userRoutes);
 //app.use(haltOnTimedout);
 app.use('/event', eventRoutes);
+app.use('/backup', backupRoutes);
 //app.use(haltOnTimedout);
 app.use('/', index);
 //app.use(haltOnTimedout);
