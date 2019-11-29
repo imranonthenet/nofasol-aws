@@ -4,6 +4,7 @@ const spawn = require('child_process').spawn;
 const compressing = require('compressing');
 const fs = require('fs');
 
+const FileInfo = require('../models/file-info');
 
 router.get('/', (req,res)=>{
     var messages=[];
@@ -30,14 +31,22 @@ router.get('/create', (req,res)=>{
             .then(function(){
                 console.log('compression done');
                 fs.copyFileSync('dump.tar','./public/uploads/dump.tar');
+                const stats = fs.statSync('dump.tar');
+
+                const fileInfo = new FileInfo('dump.tar',stats.size / 1000000.0, stats.mtime);
+
+                res.render('backup/index', {messages:messages, fileInfo:fileInfo});
             })
             .catch(function(){
                 console.log('compession not done');
+                res.render('backup/index', {messages:messages});
             });
         }
-        
+        else {
+            res.render('backup/index', {messages:messages});
+        }
 
-        res.render('backup/index', {messages:messages});
+        
     });
 });
 
