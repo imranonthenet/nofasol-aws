@@ -1301,6 +1301,19 @@ router.get('/dashboard/:id', function (req, res) {
         
     });
 
+router.get('/delete-all', function(req,res){
+    EventData.remove({}, function(err, eventData){
+        if(err) throw err;
+        Event.remove({}, function(err, event){
+            if(err) throw err;
+            
+            res.redirect('/event');
+        });
+
+        
+    });
+});
+
 router.get('/delete/:id', function (req, res) {
     
         var messages = [];
