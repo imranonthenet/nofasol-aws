@@ -31,8 +31,8 @@
                     {{#if fileInfo}}
                         <tr>
                             <td>{{fileInfo.filename}}</td>
-                            <td>{{fileInfo.filesize}}</td>
-                            <td>{{fileInfo.filedate}}</td>
+                            <td>{{fileInfo.filesize}} Mb</td>
+                            <td>{{formatDate fileInfo.filedate 'custom2'}}</td>
                             <td>
                                 <a href="/user/edit/" class="btn btn-primary" >Edit</a>
                                 <a href="/user/delete/" class="btn btn-danger" >Delete</a>

@@ -33,7 +33,8 @@ router.get('/create', (req,res)=>{
                 fs.copyFileSync('dump.tar','./public/uploads/dump.tar');
                 const stats = fs.statSync('dump.tar');
 
-                const fileInfo = new FileInfo('dump.tar',stats.size / 1000000.0, stats.mtime);
+                const filesize = stats.size / 1000000.0;
+                const fileInfo = new FileInfo('dump.tar',filesize.toFixed(2), stats.mtime);
 
                 res.render('backup/index', {messages:messages, fileInfo:fileInfo});
             })
