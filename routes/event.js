@@ -1307,11 +1307,11 @@ router.get('/delete-all', function(req,res){
         Event.remove({}, function(err, event){
             if(err) throw err;
             
-            Event.db.db.admin().command({repairDatabase:1}, function (err,res)
+            Event.db.db.admin().command({repairDatabase:1}, function (err,result)
             {
                 if(err) throw err;
-                
-                console.log(res);
+
+                console.log(result);
                 res.redirect('/event');
             });
 
