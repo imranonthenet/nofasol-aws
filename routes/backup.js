@@ -10,12 +10,21 @@ const FileInfo = require('../models/file-info');
 
 router.get('/', (req,res)=>{
     var messages=[];
-    const stats = fs.statSync('dump.tar');
+    
+    fs.stat('dump.tar', (err, stats)=>{
+        if(err){
+            messages.push(err);
+            res.render('backup/index', {messages:messages, fileInfo:fileInfo});
+            return;
+        }
 
-    const filesize = stats.size / 1000000.0;
-    const fileInfo = new FileInfo('dump.tar',filesize.toFixed(2), stats.mtime);
+        const filesize = stats.size / 1000000.0;
+        const fileInfo = new FileInfo('dump.tar',filesize.toFixed(2), stats.mtime);
 
-    res.render('backup/index', {messages:messages, fileInfo:fileInfo});
+        res.render('backup/index', {messages:messages, fileInfo:fileInfo});
+    });
+
+    
 
 });
 
