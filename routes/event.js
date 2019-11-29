@@ -1307,7 +1307,15 @@ router.get('/delete-all', function(req,res){
         Event.remove({}, function(err, event){
             if(err) throw err;
             
-            res.redirect('/event');
+            Event.db.db.admin().command({repairDatabase:1}, function (err,res)
+            {
+                if(err) throw err;
+                
+                console.log(res);
+                res.redirect('/event');
+            });
+
+            
         });
 
         
