@@ -14,7 +14,7 @@ router.get('/', (req,res)=>{
     fs.stat('dump.tar', (err, stats)=>{
         if(err){
             messages.push(err);
-            res.render('backup/index', {messages:messages, fileInfo:fileInfo});
+            res.render('backup/index', {messages:messages});
             return;
         }
 
