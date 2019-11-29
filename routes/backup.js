@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const spawn = require('child_process').spawn;
 const compressing = require('compressing');
+const fs = require('fs');
 
 
 router.get('/', (req,res)=>{
@@ -28,6 +29,7 @@ router.get('/create', (req,res)=>{
             compressing.tar.compressDir('dump', 'dump.tar')
             .then(function(){
                 console.log('compression done');
+                fs.copyFileSync('../dump.tar','../public/uploads/dump.tar');
             })
             .catch(function(){
                 console.log('compession not done');
