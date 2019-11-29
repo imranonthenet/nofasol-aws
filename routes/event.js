@@ -1312,7 +1312,7 @@ router.get('/delete-all', function(req,res){
                 if(err) throw err;
                 console.log(result);
 
-                Event.db.db.admin().command({compact:'eventdatas'}, function (err,result){
+                EventData.db.db.admin().command({compact:'eventdatas'}, function (err,result){
                     if(err) throw err;
                     console.log(result);
 
