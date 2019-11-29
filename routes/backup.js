@@ -29,7 +29,7 @@ router.get('/create', (req,res)=>{
             compressing.tar.compressDir('dump', 'dump.tar')
             .then(function(){
                 console.log('compression done');
-                fs.copyFileSync('../dump.tar','../public/uploads/dump.tar');
+                fs.copyFileSync('dump.tar','./public/uploads/dump.tar');
             })
             .catch(function(){
                 console.log('compession not done');
