@@ -1310,10 +1310,21 @@ router.get('/delete-all', function(req,res){
             Event.db.db.admin().command({repairDatabase:1}, function (err,result)
             {
                 if(err) throw err;
-
                 console.log(result);
+                
+                Event.db.db.admin().command({compact:heroku_141w6cdm}, function (err,result){
+                    if(err) throw err;
+                    console.log(result);
+                });
+
                 res.redirect('/event');
             });
+            /*
+            mongoose.connection.db.admin().command({setParameter: 1, internalQueryExecMaxBlockingSortBytes: 268435456}, function (err,result)
+            {
+                console.log(result);
+            });
+            */
 
             
         });
