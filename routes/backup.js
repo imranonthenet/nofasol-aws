@@ -24,14 +24,16 @@ router.get('/create', (req,res)=>{
     mongodump.on('exit', function (code) {
         console.log('mongodump exited with code ' + code);
 
-      
-        compressing.tar.compressDir('dump', '../public/uploads/dump.tar')
-        .then(function(){
-            console.log('compression done');
-        })
-        .catch(function(){
-            console.log('compession not done');
-        });
+        if(code==0){
+            compressing.tar.compressDir('dump', 'dump.tar')
+            .then(function(){
+                console.log('compression done');
+            })
+            .catch(function(){
+                console.log('compession not done');
+            });
+        }
+        
 
         res.render('backup/index', {messages:messages});
     });
