@@ -92,15 +92,17 @@ router.post('/upload', function(req,res){
 
         var oldpath = files.filetoupload.path;
         var newpath = path.join(__dirname, '../uploads/') + files.filetoupload.name;
+        console.log('oldpath', oldpath);
+        console.log('newpath', newpath);
         
-        compressing.tar.uncompress(files.filetoupload.path, 'dump')
+        compressing.tar.uncompress(oldpath, 'dump')
         .then(function(){
             console.log('uncompression done');
-            fs.copyFileSync(files.filetoupload.path,'./public/uploads/dump.tar');
-            const stats = fs.statSync(files.filetoupload.path);
+            fs.copyFileSync(oldpath,newpath);
+            const stats = fs.statSync(newpath);
 
             const filesize = stats.size / 1000000.0;
-            const fileInfo = new FileInfo(files.filetoupload.path,filesize.toFixed(2), stats.mtime);
+            const fileInfo = new FileInfo(files.filetoupload.name,filesize.toFixed(2), stats.mtime);
 
             res.render('backup/index', {messages:messages, fileInfo:fileInfo});
         })
