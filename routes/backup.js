@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const spawn = require('child_process').spawn;
 const compressing = require('compressing');
-const fs = require('fs');
+var formidable = require('formidable');
+var fs = require('fs');
+var path = require('path');
 
 const FileInfo = require('../models/file-info');
 
