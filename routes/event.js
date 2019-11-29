@@ -5,7 +5,7 @@ var fs = require('fs');
 var path = require('path');
 var XLSX = require('xlsx');
 var moment = require('moment');
-
+var mongoose = require('mongoose');
 
 
 var Event = require('../models/event');
@@ -1307,18 +1307,18 @@ router.get('/delete-all', function(req,res){
         Event.remove({}, function(err, event){
             if(err) throw err;
             
-            Event.db.db.admin().command({repairDatabase:1}, function (err,result)
+            mongoose.connection.db.admin().command({repairDatabase:1}, function (err,result)
             {
                 if(err) throw err;
-                console.log(result);
+                console.log('repairDatabase',result);
 
-                EventData.db.db.admin().command({compact:'eventdatas'}, function (err,result){
+                mongoose.connection.db.admin().command({compact:'eventdatas'}, function (err,result){
                     if(err) throw err;
-                    console.log(result);
+                    console.log('compact eventdatas',result);
 
-                    Event.db.db.admin().command({compact:'events'}, function (err,result){
+                    mongoose.connection.db.admin().command({compact:'events'}, function (err,result){
                         if(err) throw err;
-                        console.log(result);
+                        console.log('compact events', result);
 
                         res.redirect('/event');
                     });
