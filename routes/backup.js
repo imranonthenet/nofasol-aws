@@ -99,12 +99,24 @@ router.post('/upload', function(req,res){
         .then(function(){
             console.log('uncompression done');
             fs.copyFileSync(oldpath,newpath);
-            const stats = fs.statSync(newpath);
 
-            const filesize = stats.size / 1000000.0;
-            const fileInfo = new FileInfo(files.filetoupload.name,filesize.toFixed(2), stats.mtime);
+            fs.copyFile(oldpath,newpath, (err)=>{
+                if(err){
+                    messages.push(err.message);
+                    res.render('backup/index', {messages:messages});
+                    return;
+                }
 
-            res.render('backup/index', {messages:messages, fileInfo:fileInfo});
+                const stats = fs.statSync(newpath);
+
+                const filesize = stats.size / 1000000.0;
+                const fileInfo = new FileInfo(files.filetoupload.name,filesize.toFixed(2), stats.mtime);
+    
+                res.render('backup/index', {messages:messages, fileInfo:fileInfo});
+
+            });
+
+            
         })
         .catch(function(){
             console.log('uncompession not done');
