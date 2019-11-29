@@ -1307,6 +1307,12 @@ router.get('/delete-all', function(req,res){
         Event.remove({}, function(err, event){
             if(err) throw err;
             
+
+            mongoose.connection.db.getCollectionNames().forEach(function (collectionName) {
+                print('Compacting: ' + collectionName);
+                mongoose.connection.db.runCommand({ compact: collectionName });
+            });
+            /*
             mongoose.connection.db.admin().command({repairDatabase:1}, function (err,result)
             {
                 if(err) throw err;
@@ -1327,6 +1333,8 @@ router.get('/delete-all', function(req,res){
 
                 
             });
+            */
+           
             /*
             mongoose.connection.db.admin().command({setParameter: 1, internalQueryExecMaxBlockingSortBytes: 268435456}, function (err,result)
             {
