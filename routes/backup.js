@@ -8,7 +8,13 @@ const FileInfo = require('../models/file-info');
 
 router.get('/', (req,res)=>{
     var messages=[];
-    res.render('backup/index', {messages:messages});
+    const stats = fs.statSync('dump.tar');
+
+    const filesize = stats.size / 1000000.0;
+    const fileInfo = new FileInfo('dump.tar',filesize.toFixed(2), stats.mtime);
+
+    res.render('backup/index', {messages:messages, fileInfo:fileInfo});
+
 });
 
 router.get('/create', (req,res)=>{
@@ -49,6 +55,41 @@ router.get('/create', (req,res)=>{
 
         
     });
+});
+
+router.get('/upload', function (req, res) {
+    
+    var messages = [];
+    res.render('backup/upload', { messages: messages});
+    
+
+    
+});
+
+router.post('/upload', function(req,res){
+    var messages = [];
+    
+
+    var form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields, files) {
+
+        if(files.filetoupload==null || files.filetoupload.name==''){
+            messages.push('Please select a file to upload');
+            res.render('backup/upload', { messages: messages, hasErrors: messages.length > 0 });
+            return;
+        }
+
+        var oldpath = files.filetoupload.path;
+        var newpath = path.join(__dirname, '../uploads/') + files.filetoupload.name;
+        
+        res.render('backup/upload', { messages: messages});
+
+
+
+    });
+
+
+  
 });
 
 module.exports=router;

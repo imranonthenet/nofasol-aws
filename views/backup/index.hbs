@@ -15,7 +15,7 @@
         {{/if}}
 
         <a href="/backup/create" class="btn btn-primary">Create Backup</a>
-
+        <a href="/backup/upload" class="btn btn-primary">Restore</a>
             
             
             <table class="table">
@@ -34,8 +34,7 @@
                             <td>{{fileInfo.filesize}} Mb</td>
                             <td>{{formatDate fileInfo.filedate 'custom2'}}</td>
                             <td>
-                                <a href="/user/edit/" class="btn btn-primary" >Edit</a>
-                                <a href="/user/delete/" class="btn btn-danger" >Delete</a>
+                                <a href="/uploads/dump.tar" class="btn btn-primary" >Download</a>
                             </td>
                         </tr>
 
