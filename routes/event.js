@@ -1311,8 +1311,8 @@ router.get('/delete-all', function(req,res){
             {
                 if(err) throw err;
                 console.log(result);
-                
-                Event.db.db.admin().command({compact:heroku_141w6cdm}, function (err,result){
+
+                Event.db.db.admin().command({compact:'heroku_141w6cdm'}, function (err,result){
                     if(err) throw err;
                     console.log(result);
                 });
