@@ -98,7 +98,7 @@ router.post('/upload', function(req,res){
         compressing.tar.uncompress(oldpath, 'dump')
         .then(function(){
             console.log('uncompression done');
-            fs.copyFileSync(oldpath,newpath);
+            
 
             fs.copyFile(oldpath,newpath, (err)=>{
                 if(err){
@@ -112,7 +112,29 @@ router.post('/upload', function(req,res){
                 const filesize = stats.size / 1000000.0;
                 const fileInfo = new FileInfo(files.filetoupload.name,filesize.toFixed(2), stats.mtime);
     
-                res.render('backup/index', {messages:messages, fileInfo:fileInfo});
+                //START mongodb restore
+                const args = [];
+                const mongorestore = spawn('mongorestore', args);
+            
+                mongorestore.stdout.on('data', function (data) {
+                    console.log('stdout: ' + data);
+                });
+                mongorestore.stderr.on('data', function (data) {
+                    console.log('stderr: ' + data);
+                });
+                mongorestore.on('exit', function (code) {
+                    console.log('mongorestore exited with code ' + code);
+            
+                    if(code!=0){
+                        messages.push('Restore failed');
+                    }
+            
+                    res.render('backup/index', {messages:messages, fileInfo:fileInfo});
+                    
+                });
+                //END mongodb restore
+
+                
 
             });
 
