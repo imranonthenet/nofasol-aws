@@ -21,19 +21,22 @@ router.get('/', (req,res)=>{
             return;
         }
 
-        const filesize = stats.size / 1000000.0;
+        const filesize = stats.size / 1048576.0;
         const fileInfo = new FileInfo('dump.tar',filesize.toFixed(2), stats.mtime);
 
         disk.check('/', function(err, info) {
             if (err) {
-              console.log(err);
-            } else {
-              console.log(info.available);
-              console.log(info.free);
-              console.log(info.total);
-            }
+                messages.push(err);
+                res.render('backup/index', {messages:messages});
+                return;
+            } 
 
-            res.render('backup/index', {messages:messages, fileInfo:fileInfo});
+            const availableSpace = info.available / 1048576.0;
+            const freeSpace = info.free / 1048576.0;
+            const totalSpace = info.total / 1048576.0;
+
+
+            res.render('backup/index', {messages:messages, fileInfo:fileInfo, availableSpace:availableSpace, totalSpace:totalSpace});
           });
 
         
