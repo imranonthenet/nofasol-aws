@@ -133,9 +133,61 @@ router.get('/delete/:filename', function(req,res){
 
         req.flash('success','Backup deleted successfully');
         res.redirect('/backup');
-        
+
     });
 });
+
+router.get('/restore/:filename', function(req,res){
+
+  
+    const filename = backupPath + req.params.filename;
+
+   
+    
+    compressing.tar.uncompress(filename, './')
+    .then(function(){
+        console.log('uncompression done');
+        Event.db.db.command({dropDatabase:1}, function(err, result){
+            if(err){
+                req.flash('error',err);
+                res.redirect('/backup');
+                return;
+            }
+            //START mongodb restore
+            const args = [];
+            const mongorestore = spawn('mongorestore', args);
+        
+            mongorestore.stdout.on('data', function (data) {
+                console.log('stdout: ' + data);
+            });
+            mongorestore.stderr.on('data', function (data) {
+                console.log('stderr: ' + data);
+            });
+            mongorestore.on('exit', function (code) {
+                console.log('mongorestore exited with code ' + code);
+        
+                if(code!=0){
+                    req.flash('error','Restore failed');
+                    res.redirect('/backup');
+                    return;
+                }
+        
+                req.flash('success', 'Database restored successfully');
+                res.redirect('/backup');
+                
+            });
+            //END mongodb restore
+        });
+        
+    })
+    .catch(function(){
+        req.flash('error','Failed to uncompress backup file');
+        res.redirect('/backup');
+        return;
+    });
+
+});
+
 
 router.get('/upload', function (req, res) {
     
