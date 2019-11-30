@@ -627,7 +627,7 @@ router.get('/print-badge/:id', function(req,res){
                     var currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
                     
                     var update={};
-                    if(request.badgePrintDate==null || request.badgePrintDate==''){
+                    if(result.badgePrintDate==null || result.badgePrintDate==''){
                         update = {badgePrintDate:currentDate, modifiedDate:currentDate, statusFlag:'Attended', barcode:seq.value, username: req.user.email};
                     }
                     else {
@@ -651,7 +651,7 @@ router.get('/print-badge/:id', function(req,res){
                 var currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
 
                 var update={};
-                if(request.badgePrintDate==null || request.badgePrintDate==''){
+                if(result.badgePrintDate==null || result.badgePrintDate==''){
                     update = {badgePrintDate:currentDate, modifiedDate:currentDate, statusFlag:'Attended', username: req.user.email};
                 }
                 else {
