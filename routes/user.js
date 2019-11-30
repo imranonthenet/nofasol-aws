@@ -88,22 +88,37 @@ router.get('/', function(req,res){
 
   router.post('/change-password', function(req,res){
     var messages=[];
-    const userdata = new User();
-    userdata._id = req.user._id;
-    userdata.name = req.user.name;
-    userdata.email = req.user.email;
-    userdata.password = userdata.encryptPassword(req.body.password);
-    userdata.event = req.user.event;
-    userdata.role = req.user.role;
 
-    userdata.save(function(err, result){
+    var userId = req.user._id;
+
+    if(req.body.password != req.body.confirmPassword){
+      messages.push('New Password and Confirm Password do not match');
+      res.render('user/change-password', {messages:messages, hasErrors: messages.length>0});
+      return;
+    }
+
+    User.findById(userId, function(err, userdata){
         if(err){
           messages.push(err);
           res.render('user/change-password', {messages:messages, hasErrors: messages.length>0});
           return;
         }
-        res.redirect('/event');
+
+        userdata.password = userdata.encryptPassword(req.body.password);
+
+        userdata.save(function(err, result){
+          if(err){
+            messages.push(err);
+            res.render('user/change-password', {messages:messages, hasErrors: messages.length>0});
+            return;
+          }
+
+            res.redirect('/event');
+        });
+
+        
     });
+
 
    
   }); 
