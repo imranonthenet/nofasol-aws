@@ -96,6 +96,11 @@ router.get('/', function(req,res){
     userdata.event = req.user.event;
 
     userdata.save(function(err, result){
+        if(err){
+          messages.push(err);
+          res.render('user/change-password', {messages:messages, hasErrors: messages.length>0});
+          return;
+        }
         res.redirect('/event');
     });
 
