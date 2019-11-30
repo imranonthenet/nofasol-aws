@@ -79,6 +79,23 @@ router.get('/', function(req,res){
     });
   });  
 
+  router.get('/change-password', function(req,res){
+    var messages=[];
+
+    var userId = req.user._id;
+    User.findById(userId, function(err, userdata){
+        if(err) throw err;
+
+        Event.find({}, function(err, data){
+            if(err) throw err;
+    
+            res.render('user/edit', {csrfToken: req.csrfToken(), messages: messages, hasErrors: messages.length>0, events:data, edituser:userdata});
+        });
+
+        
+    });
+  });
+
   router.get('/delete/:id', function(req,res){
     var messages=[];
 
