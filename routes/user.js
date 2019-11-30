@@ -94,6 +94,7 @@ router.get('/', function(req,res){
     userdata.email = req.user.email;
     userdata.password = userdata.encryptPassword(req.body.password);
     userdata.event = req.user.event;
+    userdata.role = req.user.role;
 
     userdata.save(function(err, result){
         if(err){
