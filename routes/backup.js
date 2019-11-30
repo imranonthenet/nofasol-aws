@@ -160,7 +160,7 @@ router.post('/upload', function(req,res){
     
                 Event.db.db.command({dropDatabase:1}, function(err, result){
                     if(err){
-                        req.flash('error','Error dropping database';
+                        req.flash('error','Error dropping database');
                         res.redirect('/backup');
                         return;
                     }
