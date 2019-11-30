@@ -118,7 +118,7 @@ router.post('/create', (req,res)=>{
 router.get('/upload', function (req, res) {
     
     var messages = [];
-    res.render('backup/upload', { messages: messages});
+    res.render('backup/upload', { csrfToken: req.csrfToken(), messages: messages});
     
 
     
