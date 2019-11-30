@@ -16,7 +16,7 @@ var cache = require('memory-cache');
 var moment = require('moment');
 var json2xls = require('json2xls');
 //var timeout = require('connect-timeout');
-
+var upload = require('jquery-file-upload-middleware');
 
 var Country = require('./models/country');
 var BadgeCategory = require('./models/badge-category');
@@ -288,6 +288,17 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+upload.configure({
+  uploadDir: __dirname + '/public/backup-files',
+  uploadUrl: '/file-upload',
+  imageVersions: {
+      thumbnail: {
+          width: 80,
+          height: 80
+      }
+  }
+});
 
+app.use('/file-upload', upload.fileHandler());
 
 module.exports = app;
