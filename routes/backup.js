@@ -114,7 +114,7 @@ router.post('/upload', function(req,res){
                 const filesize = stats.size / 1000000.0;
                 const fileInfo = new FileInfo(files.filetoupload.name,filesize.toFixed(2), stats.mtime);
     
-                Event.db.db.admin().command({dropDatabase:1}, function(err, result){
+                Event.db.db.command({dropDatabase:1}, function(err, result){
                     console.log("Error : "+err);
                     if (err) throw err;
                     console.log("Operation Success ? "+result);
