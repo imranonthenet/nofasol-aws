@@ -41,7 +41,7 @@ router.get('/', (req,res)=>{
 
         disk.check('/', function(err, info) {
             if (err) {
-                return res.render('backup/index', {messages:'Error checking disk space', hasErrors: true});
+                return res.render('backup/index', {messages:[err], hasErrors: true});
             } 
 
             const availableSpace = info.available / gb;
@@ -151,7 +151,7 @@ router.post('/upload', function(req,res){
 
             fs.copyFile(oldpath,newpath, (err)=>{
                 if(err){
-                    req.flash('error','Error copying file');
+                    req.flash('error',err);
                     res.redirect('/backup');
                     return;
                 }
@@ -160,7 +160,7 @@ router.post('/upload', function(req,res){
     
                 Event.db.db.command({dropDatabase:1}, function(err, result){
                     if(err){
-                        req.flash('error','Error dropping database');
+                        req.flash('error',err);
                         res.redirect('/backup');
                         return;
                     }
