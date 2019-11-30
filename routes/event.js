@@ -1308,15 +1308,10 @@ router.get('/delete-all', function(req,res){
             if(err) throw err;
             
 
-            Event.db.db.command({repairDatabase:1}, function (err,result)
-            {
-                if(err) throw err;
-                console.log('repairDatabase',result);
-                res.redirect('/event');
-            });
+           
             
-            /*
-            Event.db.db.admin().command({repairDatabase:1}, function (err,result)
+            
+            Event.db.db.command({repairDatabase:1}, function (err,result)
             {
                 if(err) throw err;
                 console.log('repairDatabase',result);
@@ -1336,7 +1331,7 @@ router.get('/delete-all', function(req,res){
 
                 
             });
-            */
+            
 
 
             /*
