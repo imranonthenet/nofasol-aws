@@ -24,8 +24,8 @@ router.get('/', (req,res)=>{
     
     fs.stat('dump.tar', (err, stats)=>{
         if(err){
-            messages.push(err);
-            res.render('backup/index', {messages:messages});
+            messages.push(err.message);
+            res.render('backup/index', {messages:messages, hasErrors: messages.length>0});
             return;
         }
 
@@ -35,8 +35,8 @@ router.get('/', (req,res)=>{
 
         disk.check('/', function(err, info) {
             if (err) {
-                messages.push(err);
-                res.render('backup/index', {messages:messages});
+                messages.push(err.message);
+                res.render('backup/index', {messages:messages, hasErrors: messages.length>0});
                 return;
             } 
 
@@ -46,7 +46,8 @@ router.get('/', (req,res)=>{
 
 
             res.render('backup/index', {
-                messages:messages, fileInfo:fileInfo, 
+                messages:messages, hasErrors: messages.length>0,
+                fileInfo:fileInfo, 
                 availableSpace:availableSpace.toFixed(2), 
                 totalSpace:totalSpace.toFixed(2)
             });
@@ -93,17 +94,17 @@ router.post('/create', (req,res)=>{
                 const fileInfo = new FileInfo(filename,filesize.toFixed(2), stats.mtime);
 
                 const successMessage = 'Backup created successfully';
-                res.render('backup/index', {messages:messages, fileInfo:fileInfo, successMessage:successMessage});
+                res.render('backup/index', {messages:messages,hasErrors: messages.length>0, fileInfo:fileInfo, successMessage:successMessage});
             })
             .catch(function(){
                 console.log('compession not done');
                 messages.push('Backup failed');
-                res.render('backup/index', {messages:messages});
+                res.render('backup/index', {messages:messages, hasErrors: messages.length>0});
             });
         }
         else {
             messages.push('Backup failed');
-            res.render('backup/index', {messages:messages});
+            res.render('backup/index', {messages:messages, hasErrors: messages.length>0});
         }
 
         
