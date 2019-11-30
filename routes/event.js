@@ -625,7 +625,16 @@ router.get('/print-badge/:id', function(req,res){
     
                     var query = {_id:eventDataId};
                     var currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
-                    var update = {modifiedDate:currentDate, statusFlag:'Attended', barcode:seq.value, username: req.user.email};
+                    
+                    var update={};
+                    if(request.badgePrintDate==null || request.badgePrintDate==''){
+                        update = {badgePrintDate:currentDate, modifiedDate:currentDate, statusFlag:'Attended', barcode:seq.value, username: req.user.email};
+                    }
+                    else {
+                        update = {modifiedDate:currentDate, statusFlag:'Attended', barcode:seq.value, username: req.user.email};
+                    }
+
+                    
                     var options = {new:true};
                 
                     EventData.findOneAndUpdate(query, update, options, function(err, eventData){
@@ -640,7 +649,16 @@ router.get('/print-badge/:id', function(req,res){
             else {
                 var query = {_id:eventDataId};
                 var currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
-                var update = {modifiedDate:currentDate, statusFlag:'Attended', username: req.user.email};
+
+                var update={};
+                if(request.badgePrintDate==null || request.badgePrintDate==''){
+                    update = {badgePrintDate:currentDate, modifiedDate:currentDate, statusFlag:'Attended', username: req.user.email};
+                }
+                else {
+                    update = {modifiedDate:currentDate, statusFlag:'Attended', username: req.user.email};
+                }
+
+                
                 var options = {new:true};
             
                 EventData.findOneAndUpdate(query, update, options, function(err, eventData){
