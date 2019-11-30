@@ -15,7 +15,7 @@ var Event = require('../models/event');
 const mb = 1000000.0;
 //const gb = 1073741824.0;
 const gb = 1000000000.0;
-const backupPath = './backup/';
+const backupPath = './public/backup/';
 
 
 router.get('/', (req,res)=>{
@@ -93,10 +93,19 @@ router.post('/create', (req,res)=>{
             compressing.tar.compressDir('dump', filename)
             .then(function(){
                 console.log('compression done');
-                fs.copyFileSync(filename,backupPath + filename);
+                fs.rename(filename,backupPath + filename, (err)=>{
+                    if(err){
+                        console.log(err);
+                        req.flash('error',err);
+                        res.redirect('/backup');
+                    }
 
-                req.flash('success', 'Backup created successfully');
-                res.redirect('/backup');
+                    req.flash('success', 'Backup created successfully');
+                    res.redirect('/backup');
+
+                });
+
+                
 
             })
             .catch(function(){
