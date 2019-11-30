@@ -193,7 +193,8 @@ router.get('/restore/:filename', function(req,res){
 router.get('/upload', function (req, res) {
     
     var messages = [];
-    res.render('backup/upload', {messages: messages});
+    var scripts = [{ script: '/javascripts/file-upload.js' }];
+    res.render('backup/upload', {messages: messages, scripts:scripts});
     
 
     
