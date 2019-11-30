@@ -73,7 +73,7 @@ router.get('/create', (req,res)=>{
 router.post('/create', (req,res)=>{
     const messages=[];
     
-    var filename=req.body.filename + '.zip';
+    var filename=req.body.filename + '.tar';
     filename = filename.replace(/[/\\?%*:|"<>]/g, '-');
 
 
@@ -90,7 +90,7 @@ router.post('/create', (req,res)=>{
         
 
         if(code==0){
-            compressing.zip.compressDir('dump', filename)
+            compressing.tar.compressDir('dump', filename)
             .then(function(){
                 console.log('compression done');
                 fs.copyFileSync(filename,'./public/uploads/' + filename);
@@ -150,18 +150,19 @@ router.post('/upload', function(req,res){
             fs.copyFile(oldpath,newpath, (err)=>{
                 if(err){
                     messages.push(err.message);
-                    res.render('backup/index', {messages:messages});
+                    res.render('backup/upload', { messages: messages, hasErrors: messages.length > 0 });
                     return;
                 }
 
-                const stats = fs.statSync(newpath);
-
-                const filesize = stats.size / 1000000.0;
-                const fileInfo = new FileInfo(files.filetoupload.name,filesize.toFixed(2), stats.mtime);
+                
     
                 Event.db.db.command({dropDatabase:1}, function(err, result){
-                    console.log("Error : "+err);
-                    if (err) throw err;
+                    if(err){
+                        messages.push(err.message);
+                        res.render('backup/upload', { messages: messages, hasErrors: messages.length > 0 });
+                        return;
+                    }
+
                     console.log("Operation Success ? "+result);
                     
                     //START mongodb restore
@@ -179,9 +180,12 @@ router.post('/upload', function(req,res){
                 
                         if(code!=0){
                             messages.push('Restore failed');
+                            res.render('backup/upload', { messages: messages, hasErrors: messages.length > 0 });
+                            return;
                         }
                 
-                        res.render('backup/index', {messages:messages, fileInfo:fileInfo});
+                        req.flash('success', 'Database restored successfully');
+                        res.redirect('/backup');
                         
                     });
                     //END mongodb restore
@@ -196,8 +200,9 @@ router.post('/upload', function(req,res){
             
         })
         .catch(function(){
-            console.log('uncompession not done');
-            res.render('backup/index', {messages:messages});
+            messages.push('Failed to uncompress backup file');
+            res.render('backup/upload', { messages: messages, hasErrors: messages.length > 0 });
+            return;
         });
 
 
