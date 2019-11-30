@@ -148,8 +148,8 @@ router.post('/upload', function(req,res){
 
             fs.copyFile(oldpath,newpath, (err)=>{
                 if(err){
-                    messages.push(err.message);
-                    res.render('backup/upload', { messages: messages, hasErrors: messages.length > 0 });
+                    req.flash('error',err.message);
+                    res.redirect('/backup');
                     return;
                 }
 
@@ -157,12 +157,12 @@ router.post('/upload', function(req,res){
     
                 Event.db.db.command({dropDatabase:1}, function(err, result){
                     if(err){
-                        messages.push(err.message);
-                        res.render('backup/upload', { messages: messages, hasErrors: messages.length > 0 });
+                        req.flash('error',err.message);
+                        res.redirect('/backup');
                         return;
                     }
 
-                    console.log("Operation Success ? "+result);
+                    
                     
                     //START mongodb restore
                     const args = [];
@@ -178,8 +178,8 @@ router.post('/upload', function(req,res){
                         console.log('mongorestore exited with code ' + code);
                 
                         if(code!=0){
-                            messages.push('Restore failed');
-                            res.render('backup/upload', { messages: messages, hasErrors: messages.length > 0 });
+                            req.flash('error','Restore failed');
+                            res.redirect('/backup');
                             return;
                         }
                 
@@ -199,8 +199,8 @@ router.post('/upload', function(req,res){
             
         })
         .catch(function(){
-            messages.push('Failed to uncompress backup file');
-            res.render('backup/upload', { messages: messages, hasErrors: messages.length > 0 });
+            req.flash('error','Failed to uncompress backup file');
+            res.redirect('/backup');
             return;
         });
 
