@@ -72,8 +72,10 @@ router.get('/create', (req,res)=>{
 
 router.post('/create', (req,res)=>{
     const messages=[];
+    
     const filename=req.body.filename + '.zip';
-
+    filename = filename.replace(/[/\\?%*:|"<>]/g, '-');
+    
 
     const args = [];
     const mongodump = spawn('mongodump', args);
