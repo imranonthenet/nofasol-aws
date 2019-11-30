@@ -625,7 +625,7 @@ router.get('/print-badge/:id', function(req,res){
     
                     var query = {_id:eventDataId};
                     var currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
-                    var update = {badgePrintDate:currentDate, statusFlag:'Attended', barcode:seq.value, username: req.user.email};
+                    var update = {modifiedDate:currentDate, statusFlag:'Attended', barcode:seq.value, username: req.user.email};
                     var options = {new:true};
                 
                     EventData.findOneAndUpdate(query, update, options, function(err, eventData){
@@ -640,7 +640,7 @@ router.get('/print-badge/:id', function(req,res){
             else {
                 var query = {_id:eventDataId};
                 var currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
-                var update = {badgePrintDate:currentDate, statusFlag:'Attended', username: req.user.email};
+                var update = {modifiedDate:currentDate, statusFlag:'Attended', username: req.user.email};
                 var options = {new:true};
             
                 EventData.findOneAndUpdate(query, update, options, function(err, eventData){
@@ -744,7 +744,7 @@ router.post('/register', function (req, res) {
         eventData.regType='Onsite';
 
         if(req.body.save){
-            eventData.statusFlag='Attended';
+            eventData.statusFlag='Did Not Attend';
         }
         else if(req.body.printAndSave){ 
             eventData.badgePrintDate = moment().format('YYYY-MM-DD HH:mm:ss');
