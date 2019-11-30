@@ -1308,8 +1308,14 @@ router.get('/delete-all', function(req,res){
             if(err) throw err;
             
 
+            Event.db.db.command({repairDatabase:1}, function (err,result)
+            {
+                if(err) throw err;
+                console.log('repairDatabase',result);
+                res.redirect('/event');
+            });
             
-            
+            /*
             Event.db.db.admin().command({repairDatabase:1}, function (err,result)
             {
                 if(err) throw err;
@@ -1330,7 +1336,8 @@ router.get('/delete-all', function(req,res){
 
                 
             });
-            
+            */
+
 
             /*
             mongoose.connection.db.admin().command({setParameter: 1, internalQueryExecMaxBlockingSortBytes: 268435456}, function (err,result)

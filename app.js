@@ -23,7 +23,7 @@ var BadgeCategory = require('./models/badge-category');
 var Lookups = require('./models/lookups');
 var BadgeCategoryCode = require('./models/badge-category-code');
 
-var connString = process.env.MONGODB_URI || 'localhost:27017/heroku_141w6cdm';
+var connString = process.env.MONGODB_URI || 'localhost:27017/events';
 var options = {
   "server" : {
     "socketOptions" : {
