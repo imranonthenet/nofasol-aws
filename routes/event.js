@@ -1056,7 +1056,7 @@ router.post('/upload', function(req,res){
         }
 
         var oldpath = files.filetoupload.path;
-        var newpath = path.join(__dirname, '../uploads/') + files.filetoupload.name;
+        var newpath = path.join(__dirname, '../public/uploads/') + files.filetoupload.name;
         //var newpath = path.join(__dirname, '../public/uploads/') + 'Report.xlsx';
 
 
