@@ -22,8 +22,9 @@ router.use(csrfProtection);
 router.get('/', (req,res)=>{
     const messages = req.flash('error');
     const successMessage = req.flash('success');
+    const backupPath = './public/uploads/';
 
-    fs.readdir('./public/uploads', (err,files)=>{
+    fs.readdir(backupPath, (err,files)=>{
         if(err){
             return res.render('backup/index', {messages:err.message, hasErrors: true});
         }
@@ -31,7 +32,7 @@ router.get('/', (req,res)=>{
         const filelist=[];
 
         for(var i=0; i<files.length; i++){
-            const stats= fs.statSync(files[i]);
+            const stats= fs.statSync(backupPath + files[i]);
             const filesize = stats.size / mb;
             const fileInfo = new FileInfo(files[i],filesize.toFixed(2), stats.mtime);
             filelist.push(fileInfo);
