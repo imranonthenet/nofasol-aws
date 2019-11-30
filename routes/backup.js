@@ -24,7 +24,7 @@ router.get('/', (req,res)=>{
         const filesize = stats.size / 1000000.0;
         const fileInfo = new FileInfo('dump.tar',filesize.toFixed(2), stats.mtime);
 
-        disk.check(path, function(err, info) {
+        disk.check('/', function(err, info) {
             if (err) {
               console.log(err);
             } else {
