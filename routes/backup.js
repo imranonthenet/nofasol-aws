@@ -16,8 +16,7 @@ const mb = 1000000.0;
 //const gb = 1073741824.0;
 const gb = 1000000000.0;
 
-var csrfProtection = csrf();
-router.use(csrfProtection);
+
 
 router.get('/', (req,res)=>{
     const messages = req.flash('error');
@@ -67,7 +66,7 @@ router.get('/', (req,res)=>{
 
 router.get('/create', (req,res)=>{
     const messages=[];
-    res.render('backup/create', {csrfToken: req.csrfToken(), messages: messages, hasErrors: messages.length>0});
+    res.render('backup/create', {messages: messages, hasErrors: messages.length>0});
 });
 
 router.post('/create', (req,res)=>{
@@ -118,7 +117,7 @@ router.post('/create', (req,res)=>{
 router.get('/upload', function (req, res) {
     
     var messages = [];
-    res.render('backup/upload', { csrfToken: req.csrfToken(), messages: messages});
+    res.render('backup/upload', {messages: messages});
     
 
     
