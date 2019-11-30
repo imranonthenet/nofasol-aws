@@ -15,13 +15,13 @@ var Event = require('../models/event');
 const mb = 1000000.0;
 //const gb = 1073741824.0;
 const gb = 1000000000.0;
-
+const backupPath = './backup/';
 
 
 router.get('/', (req,res)=>{
     const messages = req.flash('error');
     const successMessage = req.flash('success');
-    const backupPath = './public/uploads/';
+    
 
     fs.readdir(backupPath, (err,files)=>{
         if(err){
@@ -92,7 +92,7 @@ router.post('/create', (req,res)=>{
             compressing.tar.compressDir('dump', filename)
             .then(function(){
                 console.log('compression done');
-                fs.copyFileSync(filename,'./public/uploads/' + filename);
+                fs.copyFileSync(filename,backupPath + filename);
 
                 req.flash('success', 'Backup created successfully');
                 res.redirect('/backup');
@@ -139,7 +139,7 @@ router.post('/upload', function(req,res){
         const filename = files.filetoupload.name.replace(/[/\\?%*:|"<>]/g, '-');
 
         var oldpath = files.filetoupload.path;
-        var newpath = path.join(__dirname, '../uploads/') + filename;
+        var newpath = backupPath + filename;
         console.log('oldpath', oldpath);
         console.log('newpath', newpath);
         
