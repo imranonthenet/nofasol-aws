@@ -6,10 +6,18 @@ const formidable = require('formidable');
 const fs = require('fs');
 const path = require('path');
 const disk = require('diskusage');
+var csrf = require('csurf');
 
 const FileInfo = require('../models/file-info');
 var Event = require('../models/event');
 
+//const mb = 1048576.0;
+const mb = 1000000.0;
+//const gb = 1073741824.0;
+const gb = 1000000000.0;
+
+var csrfProtection = csrf();
+router.use(csrfProtection);
 
 router.get('/', (req,res)=>{
     var messages=[];
@@ -21,7 +29,8 @@ router.get('/', (req,res)=>{
             return;
         }
 
-        const filesize = stats.size / 1048576.0;
+
+        const filesize = stats.size / mb;
         const fileInfo = new FileInfo('dump.tar',filesize.toFixed(2), stats.mtime);
 
         disk.check('/', function(err, info) {
@@ -31,17 +40,17 @@ router.get('/', (req,res)=>{
                 return;
             } 
 
-            const availableSpace = info.available / 1048576.0;
-            const freeSpace = info.free / 1048576.0;
-            const totalSpace = info.total / 1048576.0;
+            const availableSpace = info.available / gb;
+            const freeSpace = info.free / gb;
+            const totalSpace = info.total / gb;
 
 
             res.render('backup/index', {
                 messages:messages, fileInfo:fileInfo, 
-                availableSpace:availableSpace.toFixed(0), 
-                totalSpace:totalSpace.toFixed(0)
+                availableSpace:availableSpace.toFixed(2), 
+                totalSpace:totalSpace.toFixed(2)
             });
-            
+
           });
 
         
@@ -52,7 +61,14 @@ router.get('/', (req,res)=>{
 });
 
 router.get('/create', (req,res)=>{
-    var messages=[];
+    const messages=[];
+    res.render('backup/create', {csrfToken: req.csrfToken(), messages: messages, hasErrors: messages.length>0});
+});
+
+router.post('/create', (req,res)=>{
+    const messages=[];
+    const filename=req.body.filename + '.zip';
+
 
     const args = [];
     const mongodump = spawn('mongodump', args);
@@ -67,23 +83,26 @@ router.get('/create', (req,res)=>{
         console.log('mongodump exited with code ' + code);
 
         if(code==0){
-            compressing.tar.compressDir('dump', 'dump.tar')
+            compressing.zip.compressDir('dump', filename)
             .then(function(){
                 console.log('compression done');
-                fs.copyFileSync('dump.tar','./public/uploads/dump.tar');
-                const stats = fs.statSync('dump.tar');
+                fs.copyFileSync(filename,'./public/uploads/' + filename);
+                const stats = fs.statSync(filename);
 
-                const filesize = stats.size / 1000000.0;
-                const fileInfo = new FileInfo('dump.tar',filesize.toFixed(2), stats.mtime);
+                const filesize = stats.size / mb;
+                const fileInfo = new FileInfo(filename,filesize.toFixed(2), stats.mtime);
 
-                res.render('backup/index', {messages:messages, fileInfo:fileInfo});
+                const successMessage = 'Backup created successfully';
+                res.render('backup/index', {messages:messages, fileInfo:fileInfo, successMessage:successMessage});
             })
             .catch(function(){
                 console.log('compession not done');
+                messages.push('Backup failed');
                 res.render('backup/index', {messages:messages});
             });
         }
         else {
+            messages.push('Backup failed');
             res.render('backup/index', {messages:messages});
         }
 

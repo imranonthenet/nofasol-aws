@@ -14,9 +14,15 @@
             </div>
         {{/if}}
 
+        {{#if successMessage}}
+            <div class="alert alert-success">
+                <p>{{successMessage}}</p>
+            </div>
+        {{/if}}
+
         <a href="/backup/create" class="btn btn-primary">Create Backup</a>
         <a href="/backup/upload" class="btn btn-primary">Restore</a>
-        <p>Available space: {{availableSpace}} Mb our of {{totalSpace}} Mb</p>
+        <p>Available space: {{availableSpace}} Gb out of {{totalSpace}} Gb</p>
             
             <table class="table">
                 <thead>
