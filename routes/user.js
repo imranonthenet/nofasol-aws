@@ -82,19 +82,25 @@ router.get('/', function(req,res){
   router.get('/change-password', function(req,res){
     var messages=[];
 
-    var userId = req.user._id;
-    User.findById(userId, function(err, userdata){
-        if(err) throw err;
-
-        Event.find({}, function(err, data){
-            if(err) throw err;
+    res.render('user/change-password', {csrfToken: req.csrfToken(), messages: messages, hasErrors: messages.length>0});
     
-            res.render('user/edit', {csrfToken: req.csrfToken(), messages: messages, hasErrors: messages.length>0, events:data, edituser:userdata});
-        });
-
-        
-    });
   });
+
+  router.post('/change-password', function(req,res){
+    var messages=[];
+    const userdata = new User();
+    userdata._id = req.user._id;
+    userdata.name = req.user.name;
+    userdata.email = req.user.email;
+    userdata.password = userdata.encryptPassword(req.body.password);
+    userdata.event = req.user.event;
+
+    userdata.save(function(err, result){
+        res.redirect('/event');
+    });
+
+   
+  }); 
 
   router.get('/delete/:id', function(req,res){
     var messages=[];
