@@ -136,8 +136,10 @@ router.post('/upload', function(req,res){
             return;
         }
 
+        const filename = files.filetoupload.name.replace(/[/\\?%*:|"<>]/g, '-');
+
         var oldpath = files.filetoupload.path;
-        var newpath = path.join(__dirname, '../uploads/') + files.filetoupload.name;
+        var newpath = path.join(__dirname, '../uploads/') + filename;
         console.log('oldpath', oldpath);
         console.log('newpath', newpath);
         
