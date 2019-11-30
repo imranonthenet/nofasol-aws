@@ -120,7 +120,7 @@ router.post('/upload', function(req,res){
                     console.log("Operation Success ? "+result);
                     
                     //START mongodb restore
-                    const args = ['--db','events'];
+                    const args = [];
                     const mongorestore = spawn('mongorestore', args);
                 
                     mongorestore.stdout.on('data', function (data) {
