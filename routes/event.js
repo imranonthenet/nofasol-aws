@@ -2365,14 +2365,12 @@ router.get('/export-files', function(req,res){
   });  
 
 
-router.get('/import/:id', function(req,res){
+router.get('/import', function(req,res){
     var scripts = [{ script: '/javascripts/upload.js' }];
     var messages = [];
-    var eventId = req.params.id;
-    req.session.eventId = eventId;
 
     Event.findById(eventId, function(err, event){
-        res.render('event/import', { scripts: scripts, messages: messages, hasErrors: messages.length > 0, event: event });
+        res.render('event/import', { scripts: scripts, messages: messages, hasErrors: messages.length > 0 });
     })
 
     
