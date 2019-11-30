@@ -20,24 +20,27 @@ var csrfProtection = csrf();
 router.use(csrfProtection);
 
 router.get('/', (req,res)=>{
-    var messages=[];
-    
-    fs.stat('dump.tar', (err, stats)=>{
+    const messages = req.flash('error');
+    const successMessage = req.flash('success');
+
+    fs.readdir('./public/uploads', (err,files)=>{
         if(err){
-            messages.push(err.message);
-            res.render('backup/index', {messages:messages, hasErrors: messages.length>0});
-            return;
+            return res.render('backup/index', {messages:err.message, hasErrors: true});
         }
 
+        const filelist=[];
 
-        const filesize = stats.size / mb;
-        const fileInfo = new FileInfo('dump.tar',filesize.toFixed(2), stats.mtime);
+        for(var i=0; i<files.length; i++){
+            const stats= fs.statSync(files[i]);
+            const filesize = stats.size / mb;
+            const fileInfo = new FileInfo(files[i],filesize.toFixed(2), stats.mtime);
+            filelist.push(fileInfo);
+
+        }
 
         disk.check('/', function(err, info) {
             if (err) {
-                messages.push(err.message);
-                res.render('backup/index', {messages:messages, hasErrors: messages.length>0});
-                return;
+                return res.render('backup/index', {messages:err.message, hasErrors: true});
             } 
 
             const availableSpace = info.available / gb;
@@ -47,15 +50,15 @@ router.get('/', (req,res)=>{
 
             res.render('backup/index', {
                 messages:messages, hasErrors: messages.length>0,
-                fileInfo:fileInfo, 
+                filelist:filelist, 
                 availableSpace:availableSpace.toFixed(2), 
                 totalSpace:totalSpace.toFixed(2)
             });
 
           });
-
-        
     });
+
+    
 
     
 
@@ -81,30 +84,28 @@ router.post('/create', (req,res)=>{
         console.log('stderr: ' + data);
     });
     mongodump.on('exit', function (code) {
-        console.log('mongodump exited with code ' + code);
+        
 
         if(code==0){
             compressing.zip.compressDir('dump', filename)
             .then(function(){
                 console.log('compression done');
                 fs.copyFileSync(filename,'./public/uploads/' + filename);
-                const stats = fs.statSync(filename);
 
-                const filesize = stats.size / mb;
-                const fileInfo = new FileInfo(filename,filesize.toFixed(2), stats.mtime);
+                req.flash('success', 'Backup created successfully');
+                res.redirect('/backup/index');
 
-                const successMessage = 'Backup created successfully';
-                res.render('backup/index', {messages:messages,hasErrors: messages.length>0, fileInfo:fileInfo, successMessage:successMessage});
             })
             .catch(function(){
                 console.log('compession not done');
-                messages.push('Backup failed');
-                res.render('backup/index', {messages:messages, hasErrors: messages.length>0});
+                req.flash('error','Error while compressing backup file');
+                res.redirect('/backup/index');
             });
         }
         else {
-            messages.push('Backup failed');
-            res.render('backup/index', {messages:messages, hasErrors: messages.length>0});
+            console.log('mongodump exited with code ' + code);
+            req.flash('error','Error while creating backup');
+            res.redirect('/backup/index');
         }
 
         

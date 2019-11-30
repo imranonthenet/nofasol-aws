@@ -34,17 +34,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                    {{#if fileInfo}}
+                    {{#each filelist}}
                         <tr>
-                            <td>{{fileInfo.filename}}</td>
-                            <td>{{fileInfo.filesize}} Mb</td>
-                            <td>{{formatDate fileInfo.filedate 'custom2'}}</td>
+                            <td>{{this.filename}}</td>
+                            <td>{{this.filesize}} Mb</td>
+                            <td>{{formatDate this.filedate 'custom2'}}</td>
                             <td>
-                                <a href="/uploads/dump.tar" class="btn btn-primary" >Download</a>
+                                <a href="/uploads/{{this.filename}}" class="btn btn-primary" >Download</a>
                             </td>
                         </tr>
 
-                    {{/if}}
+                    {{/each}}
                 </tbody>
 
             </table>
