@@ -15,7 +15,7 @@ var Event = require('../models/event');
 const mb = 1000000.0;
 //const gb = 1073741824.0;
 const gb = 1000000000.0;
-const backupPath = './public/backup/';
+const backupPath = './public/backup-files/';
 
 
 router.get('/', (req,res)=>{
@@ -120,6 +120,19 @@ router.post('/create', (req,res)=>{
             res.redirect('/backup');
         }
 
+        
+    });
+});
+
+router.get('/delete/:filename', function(req,res){
+    fs.unlink(backupPath + req.params.filename, (err)=>{
+        if(err){
+            req.flash('error',err);
+            res.redirect('/backup');
+        }
+
+        req.flash('success','Backup deleted successfully');
+        res.redirect('/backup');
         
     });
 });

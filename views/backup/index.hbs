@@ -40,7 +40,8 @@
                             <td>{{this.filesize}} Mb</td>
                             <td>{{formatDate this.filedate 'custom2'}}</td>
                             <td>
-                                <a href="/backup/{{this.filename}}" class="btn btn-primary" >Download</a>
+                                <a href="/backup-files/{{this.filename}}" class="btn btn-primary" >Download</a>&nbsp;&nbsp;
+                                <a href="/backup/delete/{{this.filename}}" class="btn btn-danger" >Delete</a>
                             </td>
                         </tr>
 
