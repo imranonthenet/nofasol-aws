@@ -53,7 +53,8 @@ router.get('/', (req,res)=>{
                 messages:messages, hasErrors: messages.length>0,
                 filelist:filelist, 
                 availableSpace:availableSpace.toFixed(2), 
-                totalSpace:totalSpace.toFixed(2)
+                totalSpace:totalSpace.toFixed(2),
+                successMessage:successMessage
             });
 
           });
