@@ -2365,4 +2365,47 @@ router.get('/export-files', function(req,res){
   });  
 
 
+router.get('/import/:id', function(req,res){
+    var scripts = [{ script: '/javascripts/upload.js' }];
+    var messages = [];
+    var eventId = req.params.id;
+    req.session.eventId = eventId;
+
+    Event.findById(eventId, function(err, event){
+        res.render('event/import', { scripts: scripts, messages: messages, hasErrors: messages.length > 0, event: event });
+    })
+
+    
+
+});
+
+router.post('/import', function(req,res){
+    var filename='';
+
+      var form = new formidable.IncomingForm();
+      form.multiples = true;
+      form.uploadDir = path.join(__dirname, '../public/backup-files');
+    
+      form.on('file', function(field, file) {
+        console.log('form.on.file');
+        filename=file.path;
+        
+      });
+    
+      form.on('error', function(err) {
+        console.log('An error has occured: \n' + err);
+      });
+    
+      // once all the files have been uploaded, send a response to the client
+      form.on('end', function() {
+        console.log('reading filename ' + filename);
+        
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ result:'success' }));
+      });
+    
+      form.parse(req);
+    
+    });
+
 module.exports = router;
