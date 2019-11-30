@@ -26,7 +26,7 @@ router.get('/', (req,res)=>{
     fs.readdir(backupPath, (err,files)=>{
         if(err){
             console.log(err);
-            return res.render('backup/index', {messages:'Error reading backup folder', hasErrors: true});
+            return res.render('backup/index', {messages:[err], hasErrors: true});
         }
 
         const filelist=[];
