@@ -112,27 +112,35 @@ router.post('/upload', function(req,res){
                 const filesize = stats.size / 1000000.0;
                 const fileInfo = new FileInfo(files.filetoupload.name,filesize.toFixed(2), stats.mtime);
     
-                //START mongodb restore
-                const args = [];
-                const mongorestore = spawn('mongorestore', args);
-            
-                mongorestore.stdout.on('data', function (data) {
-                    console.log('stdout: ' + data);
-                });
-                mongorestore.stderr.on('data', function (data) {
-                    console.log('stderr: ' + data);
-                });
-                mongorestore.on('exit', function (code) {
-                    console.log('mongorestore exited with code ' + code);
-            
-                    if(code!=0){
-                        messages.push('Restore failed');
-                    }
-            
-                    res.render('backup/index', {messages:messages, fileInfo:fileInfo});
+                Event.db.db.admin().command({dropDatabase:1}, function(err, result){
+                    console.log("Error : "+err);
+                    if (err) throw err;
+                    console.log("Operation Success ? "+result);
                     
+                    //START mongodb restore
+                    const args = [];
+                    const mongorestore = spawn('mongorestore', args);
+                
+                    mongorestore.stdout.on('data', function (data) {
+                        console.log('stdout: ' + data);
+                    });
+                    mongorestore.stderr.on('data', function (data) {
+                        console.log('stderr: ' + data);
+                    });
+                    mongorestore.on('exit', function (code) {
+                        console.log('mongorestore exited with code ' + code);
+                
+                        if(code!=0){
+                            messages.push('Restore failed');
+                        }
+                
+                        res.render('backup/index', {messages:messages, fileInfo:fileInfo});
+                        
+                    });
+                    //END mongodb restore
                 });
-                //END mongodb restore
+
+                
 
                 
 
