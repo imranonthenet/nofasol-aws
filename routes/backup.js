@@ -94,19 +94,19 @@ router.post('/create', (req,res)=>{
                 fs.copyFileSync(filename,'./public/uploads/' + filename);
 
                 req.flash('success', 'Backup created successfully');
-                res.redirect('/backup/index');
+                res.redirect('/backup');
 
             })
             .catch(function(){
                 console.log('compession not done');
                 req.flash('error','Error while compressing backup file');
-                res.redirect('/backup/index');
+                res.redirect('/backup');
             });
         }
         else {
             console.log('mongodump exited with code ' + code);
             req.flash('error','Error while creating backup');
-            res.redirect('/backup/index');
+            res.redirect('/backup');
         }
 
         
