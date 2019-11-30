@@ -22,7 +22,7 @@ $('#upload-input').on('change', function(){
     }
 
     $.ajax({
-      url: '/event/import',
+      url: '/backup/import',
       type: 'POST',
       data: formData,
       processData: false,
