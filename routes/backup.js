@@ -25,6 +25,7 @@ router.get('/', (req,res)=>{
 
     fs.readdir(backupPath, (err,files)=>{
         if(err){
+            console.log(err);
             return res.render('backup/index', {messages:err.message, hasErrors: true});
         }
 
