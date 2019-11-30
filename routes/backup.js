@@ -36,7 +36,12 @@ router.get('/', (req,res)=>{
             const totalSpace = info.total / 1048576.0;
 
 
-            res.render('backup/index', {messages:messages, fileInfo:fileInfo, availableSpace:availableSpace, totalSpace:totalSpace});
+            res.render('backup/index', {
+                messages:messages, fileInfo:fileInfo, 
+                availableSpace:availableSpace.toFixed(0), 
+                totalSpace:totalSpace.toFixed(0)
+            });
+            
           });
 
         
