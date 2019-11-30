@@ -141,7 +141,7 @@ router.post('/upload', function(req,res){
         console.log('oldpath', oldpath);
         console.log('newpath', newpath);
         
-        compressing.tar.uncompress(oldpath, 'dump')
+        compressing.tar.uncompress(oldpath, './')
         .then(function(){
             console.log('uncompression done');
             
