@@ -7,6 +7,8 @@ var fs = require('fs');
 var path = require('path');
 
 const FileInfo = require('../models/file-info');
+var Event = require('../models/event');
+
 
 router.get('/', (req,res)=>{
     var messages=[];
