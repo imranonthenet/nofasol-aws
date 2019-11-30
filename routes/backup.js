@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const spawn = require('child_process').spawn;
 const compressing = require('compressing');
-var formidable = require('formidable');
-var fs = require('fs');
-var path = require('path');
+const formidable = require('formidable');
+const fs = require('fs');
+const path = require('path');
+const disk = require('diskusage');
 
 const FileInfo = require('../models/file-info');
 var Event = require('../models/event');
@@ -23,7 +24,19 @@ router.get('/', (req,res)=>{
         const filesize = stats.size / 1000000.0;
         const fileInfo = new FileInfo('dump.tar',filesize.toFixed(2), stats.mtime);
 
-        res.render('backup/index', {messages:messages, fileInfo:fileInfo});
+        disk.check(path, function(err, info) {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log(info.available);
+              console.log(info.free);
+              console.log(info.total);
+            }
+
+            res.render('backup/index', {messages:messages, fileInfo:fileInfo});
+          });
+
+        
     });
 
     
