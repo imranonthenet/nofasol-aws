@@ -5,12 +5,12 @@ $('#fileupload').fileupload({
   add: function (e, data) {
       var goUpload = true;
       var uploadFile = data.files[0];
-      if (!(/\.(xls|xlsx)$/i).test(uploadFile.name)) {
-          alert('You can only import Excel (xls or xlsx) files');
+      if (!(/\.(tar|tgz)$/i).test(uploadFile.name)) {
+          alert('You can only import MongoDB backup (tar) files');
           goUpload = false;
       }
-      if (uploadFile.size > 90000000) { // 10mb
-          alert('File size cannot be more than 90 mb');
+      if (uploadFile.size > 100000000) { // 100mb
+          alert('File size cannot be more than 100 mb');
           goUpload = false;
       }
       if (goUpload == true) {
