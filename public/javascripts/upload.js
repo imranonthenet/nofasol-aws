@@ -20,7 +20,7 @@ $('#fileupload').fileupload({
   done: function (e, data) {
       //location.reload(true);
       console.log(data.result.result);
-      window.location='/event';
+      window.location='/backup';
       
 
   }

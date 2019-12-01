@@ -308,18 +308,26 @@ router.post('/import', function(req,res){
 
       var form = new formidable.IncomingForm();
       form.multiples = true;
-      form.uploadDir = path.join(__dirname, '../public/backup-files');
+      form.uploadDir = backupPath;
     
       form.on('file', function(field, file) {
         console.log('form.on.file');
-        filename=file.path;
+        filename = file.name.replace(/[/\\?%*:|"<>]/g, '-');
+
+        fs.rename(file.path, backupPath + filename);
         
       });
     
       form.on('error', function(err) {
-        console.log('An error has occured: \n' + err);
+        console.log("an error has occured with form upload");
+        console.log(err);
+        req.resume();
       });
     
+      form.on('aborted', function(err) {
+        console.log("user aborted upload");
+      });
+
       // once all the files have been uploaded, send a response to the client
       form.on('end', function() {
         console.log('reading filename ' + filename);
@@ -328,7 +336,9 @@ router.post('/import', function(req,res){
         res.send(JSON.stringify({ result:'success' }));
       });
     
-      form.parse(req);
+      form.parse(req, function() {
+        //res.render('backup/index');
+      });
     
     });
 
