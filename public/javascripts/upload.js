@@ -29,6 +29,6 @@ $('#fileupload').fileupload({
   $('.progress .progress-bar').css('width', progress + '%');
 
   if (progress === 100) {
-    $('.progress-bar').html('Please wait while data is being processed...');
+    $('.progress-bar').html('Please wait while file is being processed...');
   }
 });
