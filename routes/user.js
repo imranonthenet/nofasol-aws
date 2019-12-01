@@ -146,6 +146,15 @@ router.get('/', function(req,res){
     });
   }); 
 
+  router.get('/delete-all', function(req,res){
+
+    User.remove({email:{$ne:'admin@admin.com'} }, function(err){
+      res.redirect('/user');
+    })
+
+  });
+
+
 router.get('/profile', isLoggedIn ,function(req,res,next){
     res.render('user/profile');
   
