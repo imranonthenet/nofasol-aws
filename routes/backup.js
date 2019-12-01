@@ -307,7 +307,7 @@ router.post('/import', function(req,res){
     var filename='';
 
       var form = new formidable.IncomingForm();
-      form.multiples = true;
+      form.multiples = false;
       form.uploadDir = backupPath;
     
       form.on('file', function(field, file) {
