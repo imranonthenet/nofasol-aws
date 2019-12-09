@@ -244,22 +244,19 @@ $('#fontStyle').on('change', function(){
 
 $('#textAlign').on('change', function(){
     if(activeObject){
+        activeObject.style.textAlign=this.value;
+        activeObject.style.left=0;
+
         if(this.value=='center'){
             activeObject.style.display='block';
-            activeObject.style.textAlign=this.value;
-            activeObject.style.left=0;
             activeObject.style.cssFloat='none';
         }
         else if(this.value=='left'){
             activeObject.style.display='inline';
-            activeObject.style.textAlign=this.value;
-            activeObject.style.left=0;
             activeObject.style.cssFloat='left';
         }
         else if(this.value=='right'){
             activeObject.style.display='inline';
-            activeObject.style.textAlign=this.value;
-            activeObject.style.left=0;
             activeObject.style.cssFloat='right';
         }
     }
@@ -313,6 +310,8 @@ var resetLayout = function(){
     $("#{{this.fieldName}}").css('font-size', '11px');
     $("#{{this.fieldName}}").css('font-weight','normal');
     $("#{{this.fieldName}}").css('font-style', 'normal');
+    $("#{{this.fieldName}}").css('text-align', 'left');
+    $("#{{this.fieldName}}").css('float', 'none');
     {{/each}}
 
 }
@@ -342,7 +341,25 @@ $(document).ready(function(){
     $("#{{this.fieldName}}").css('font-size','{{this.fieldFontSize}}px');
     $("#{{this.fieldName}}").css('font-weight','{{this.fieldFontWeight}}');
     $("#{{this.fieldName}}").css('font-style','{{this.fieldFontStyle}}');
+    $("#{{this.fieldName}}").css('text-align','{{this.fieldTextAlign}}');
 
+
+    if('{{this.fieldTextAlign}}'=='center'){
+        $("#{{this.fieldName}}").css('display','block');
+        $("#{{this.fieldName}}").css('left',0);
+        $("#{{this.fieldName}}").css('float','none');
+    }
+    else if('{{this.fieldTextAlign}}'=='left'){
+        $("#{{this.fieldName}}").css('display','inline');
+        $("#{{this.fieldName}}").css('left',0);
+        $("#{{this.fieldName}}").css('float','left');
+    }
+    if('{{this.fieldTextAlign}}'=='right'){
+        $("#{{this.fieldName}}").css('display','inline');
+        $("#{{this.fieldName}}").css('left',0);
+        $("#{{this.fieldName}}").css('float','right');
+    }
+    
 
 
     $("#{{this.fieldName}}").draggable({
