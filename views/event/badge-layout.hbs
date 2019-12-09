@@ -193,6 +193,8 @@ var fields = [];
 var activeObject=null;
 
 $('.canvas').click(function(event){
+    console.log(event.target.style);
+    
     activeObject=event.target;
 
     $('#fontFamily').val(event.target.style.fontFamily);
@@ -324,6 +326,15 @@ $(document).ready(function(){
     {{#each fields}}
     topIndex = {{@index}};
 
+    $("#{{this.fieldName}}").draggable({
+        containment: "#badgeCanvas",
+        scroll: false,
+        stop: function (event, ui) {
+            
+            console.log(ui);
+            
+        }
+    });
 
     fields.push('{{this.fieldName}}');
 
