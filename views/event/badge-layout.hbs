@@ -196,7 +196,7 @@ $('.canvas').on('click', function(event){
 
     activeObject=event.target;
 
-    $('#fontFamily').val(event.target.style.fontFamily);
+    $('#fontFamily').val(event.target.style.fontFamily.replace(/"/g, ''));
     $('#fontSize').val(event.target.style.fontSize.substring(0,2));
     $('#fontWeight').val(event.target.style.fontWeight);
     $('#fontStyle').val(event.target.style.fontStyle);
