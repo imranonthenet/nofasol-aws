@@ -247,16 +247,19 @@ $('#textAlign').on('change', function(){
         if(this.value=='center'){
             activeObject.style.display='block';
             activeObject.style.textAlign=this.value;
+            activeObject.style.left=0;
         }
         else if(this.value=='left'){
             activeObject.style.display='inline';
             activeObject.style.textAlign=this.value;
             activeObject.style.marginRight='auto';
+            activeObject.style.left=0;
         }
         else if(this.value=='right'){
             activeObject.style.display='inline';
             activeObject.style.textAlign=this.value;
             activeObject.style.marginLeft='auto';
+            activeObject.style.left=0;
         }
     }
     else {
