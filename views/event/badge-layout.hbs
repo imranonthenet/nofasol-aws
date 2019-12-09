@@ -285,23 +285,19 @@ var submitForm = function(){
 };
 
 var resetLayout = function(){
-    
-    for(var i=0; i<fields.length; i++){
-        canvas.item(i).set('top', (i+1) * 20);
-        canvas.item(i).set('left',10);
-        if(fields[i]!='barcode'){
-            canvas.item(i).width=100;
-            canvas.item(i).fontFamily='Calibri';
-            canvas.item(i).fontSize=11;
-            canvas.item(i).fontWeight='normal';
-            canvas.item(i).fontStyle='normal';
-            canvas.item(i).textAlign='left';
-            canvas.item(i).angle=0;
 
-        }
+    var topIndex=0;
 
-    }
-    canvas.renderAll();
+    {{#each fields}}
+    topIndex = {{@index}};
+    $("#{{this.fieldName}}").style.left = 10;
+    $("#{{this.fieldName}}").style.top = (topIndex+1) * 20;
+    $("#{{this.fieldName}}").style.fontFamily = 'Calibri';
+    $("#{{this.fieldName}}").style.fontSize = '11px';
+    $("#{{this.fieldName}}").style.fontWeight = 'normal';
+    $("#{{this.fieldName}}").style.fontStyle = 'normal';
+    {{/each}}
+
 }
 
 $(document).ready(function(){
@@ -323,7 +319,14 @@ $(document).ready(function(){
     var topIndex=0;
 
     {{#each fields}}
-    topIndex = {{@index}};
+    $("#{{this.fieldName}}").style.left = {{this.fieldLeft}};
+    $("#{{this.fieldName}}").style.top = {{this.fieldTop}};
+    $("#{{this.fieldName}}").style.fontFamily = {{this.fieldFontFamily}};
+    $("#{{this.fieldName}}").style.fontSize = {{this.fieldFontSize}};
+    $("#{{this.fieldName}}").style.fontWeight = {{this.fieldFontWeight}};
+    $("#{{this.fieldName}}").style.fontStyle = {{this.fieldFontStyle}};
+
+
 
     $("#{{this.fieldName}}").draggable({
         containment: "#badgeCanvas",
