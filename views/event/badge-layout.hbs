@@ -133,13 +133,39 @@
             1748 pixels x 2480 pixels (print resolution) 
             420 pixels x 595 pixels (screen resolution)
         -->
-        <canvas id="badgeCanvas" width="559" height="794" style="border: 1px solid black;"></canvas>
+      
         
-        {{#if showBarcode}}
-        <img id="barcode" src="/images/barcode.png" style="display: none" >
-        <input type="hidden" name="barcode_top" id="barcode_top">
-        <input type="hidden" name="barcode_left" id="barcode_left">
-        {{/if}}
+        <div id="badgeCanvas" width="559" height="794" style="border: 1px solid black;" class="canvas">
+
+            {{#each fields}}
+            <span id="{{this.fieldName}}" style="
+            left: {{this.fieldLeft}}; 
+            top: {{this.fieldTop}}; 
+            width: {{this.fieldWidth}}; 
+            font-family: '{{this.fieldFontFamily}}'; 
+            font-size: {{this.fieldFontSize}};
+            font-weight: '{{this.fieldFontWeight}}';
+            font-style: '{{this.fieldFontStyle}}';
+            text-align: '{{this.fieldTextAlign}}';
+            ">
+                {{toUpperCase this.fieldLabel}}
+            </span>
+
+            {{/each}}         
+
+            {{#if showBarcode}}
+            <img id="barcode" src="/images/barcode.png" style="
+            left: {{barcodeLeft}};
+            top: {{barcodeTop}};
+            " >
+            <input type="hidden" name="barcode_top" id="barcode_top">
+            <input type="hidden" name="barcode_left" id="barcode_left">
+            {{/if}}
+
+  
+        </div> 
+
+        
 
 
             
@@ -155,7 +181,6 @@
 </div>
 
 <script src="/library/jquery-3.3.1.min.js"></script>
-<script src="/library/fabric.min.js"></script>
 <script src="/library/JsBarcode.all.min.js"></script>
 
 <script>
@@ -165,26 +190,24 @@
     {{/if}}
 
 var fields = [];
-var canvas = new fabric.Canvas('badgeCanvas');
+var activeObject=null;
 
+$('.canvas').click(function(event){
+    activeObject=event.target;
 
-canvas.on('mouse:down', function(options) {
-  if (options.target) {
-    console.log('an object was clicked! ', options.target.left);
-    $('#fontFamily').val(options.target.fontFamily);
-    $('#fontSize').val(options.target.fontSize);
-    $('#fontWeight').val(options.target.fontWeight);
-    $('#fontStyle').val(options.target.fontStyle);
-    $('#textAlign').val(options.target.textAlign);
-  }
+    $('#fontFamily').val(event.target.style.fontFamily);
+    $('#fontSize').val(event.target.style.fontSize);
+    $('#fontWeight').val(event.target.style.fontWeight);
+    $('#fontStyle').val(event.target.style.fontStyle);
+    $('#textAlign').val(event.target.style.textAlign);
 });
 
 
+
+
 $('#fontFamily').on('change', function(){
-    if(canvas.getActiveObject()){
-        
-        canvas.getActiveObject().set("fontFamily", this.value);
-        canvas.renderAll();
+    if(activeObject){
+        activeObject.style.fontFamily=this.value;
     }
     else {
         alert('Please select an item on the canvas first');
@@ -192,10 +215,8 @@ $('#fontFamily').on('change', function(){
 });
 
 $('#fontSize').on('change', function(){
-    if(canvas.getActiveObject()){
-        
-        canvas.getActiveObject().set("fontSize", this.value);
-        canvas.renderAll();
+    if(activeObject){
+        activeObject.style.fontSize=this.value;
     }
     else {
         alert('Please select an item on the canvas first');
@@ -203,10 +224,8 @@ $('#fontSize').on('change', function(){
 });
 
 $('#fontWeight').on('change', function(){
-    if(canvas.getActiveObject()){
-        
-        canvas.getActiveObject().set("fontWeight", this.value);
-        canvas.renderAll();
+    if(activeObject){
+        activeObject.style.fontWeight=this.value;
     }
     else {
         alert('Please select an item on the canvas first');
@@ -214,10 +233,8 @@ $('#fontWeight').on('change', function(){
 });
 
 $('#fontStyle').on('change', function(){
-    if(canvas.getActiveObject()){
-        
-        canvas.getActiveObject().set("fontStyle", this.value);
-        canvas.renderAll();
+    if(activeObject){
+        activeObject.style.fontStyle=this.value;
     }
     else {
         alert('Please select an item on the canvas first');
@@ -225,10 +242,8 @@ $('#fontStyle').on('change', function(){
 });
 
 $('#textAlign').on('change', function(){
-    if(canvas.getActiveObject()){
-        
-        canvas.getActiveObject().set("textAlign", this.value);
-        canvas.renderAll();
+    if(activeObject){
+        activeObject.style.textAlign=this.value;
     }
     else {
         alert('Please select an item on the canvas first');
@@ -252,16 +267,16 @@ var submitForm = function(){
     //$('#fullName_width').val(txtFullName.width);
 
     for(var i=0; i<fields.length; i++){
-        $('#' + fields[i] + '_top').val(canvas.item(i).top);
-        $('#' + fields[i] + '_left').val(canvas.item(i).left);
+        $('#' + fields[i] + '_top').val( $('#' + fields[i]).style.top  );
+        $('#' + fields[i] + '_left').val( $('#' + fields[i]).style.left  );
         
         if(fields[i]!='barcode'){
-            $('#' + fields[i] + '_width').val(canvas.item(i).width);
-            $('#' + fields[i] + '_fontFamily').val(canvas.item(i).fontFamily);
-            $('#' + fields[i] + '_fontSize').val(canvas.item(i).fontSize);
-            $('#' + fields[i] + '_fontWeight').val(canvas.item(i).fontWeight);
-            $('#' + fields[i] + '_fontStyle').val(canvas.item(i).fontStyle);
-            $('#' + fields[i] + '_textAlign').val(canvas.item(i).textAlign);
+            $('#' + fields[i] + '_width').val( $('#' + fields[i]).style.width  );
+            $('#' + fields[i] + '_fontFamily').val( $('#' + fields[i]).style.fontFamily  );
+            $('#' + fields[i] + '_fontSize').val( $('#' + fields[i]).style.fontSize  );
+            $('#' + fields[i] + '_fontWeight').val( $('#' + fields[i]).style.fontWeight  );
+            $('#' + fields[i] + '_fontStyle').val( $('#' + fields[i]).style.fontStyle  );
+            $('#' + fields[i] + '_textAlign').val( $('#' + fields[i]).style.textAlign  );
         }
     }
 
@@ -309,36 +324,12 @@ $(document).ready(function(){
     {{#each fields}}
     topIndex = {{@index}};
 
-    var {{this.fieldName}} = new fabric.Textbox('{{toUpperCase this.fieldLabel}}', {
-        left: {{this.fieldLeft}},
-        top: {{this.fieldTop}},
-        width: {{this.fieldWidth}},
-        angle: 0,
-        opacity: 1,
-        fontFamily: '{{this.fieldFontFamily}}',
-        fontSize: {{this.fieldFontSize}},
-        fontWeight: '{{this.fieldFontWeight}}',
-        fontStyle: '{{this.fieldFontStyle}}',
-        textAlign: '{{this.fieldTextAlign}}'
-        });
 
-    canvas.add({{this.fieldName}}); 
     fields.push('{{this.fieldName}}');
 
     {{/each}}
 
-    {{#if showBarcode}}
-        topIndex = topIndex + 100;
-        var imgElement = document.getElementById('barcode');
-        var imgInstance = new fabric.Image(imgElement, {
-        left: {{barcodeLeft}},
-        top: {{barcodeTop}},
-        angle: 0,
-        opacity: 1
-        });
-        canvas.add(imgInstance);
-        fields.push('barcode');
-    {{/if}}
+
 
 });
 
