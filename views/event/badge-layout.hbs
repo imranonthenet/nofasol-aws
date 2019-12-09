@@ -282,16 +282,16 @@ var submitForm = function(){
     //$('#fullName_width').val(txtFullName.width);
 
     for(var i=0; i<fields.length; i++){
-        $('#' + fields[i] + '_top').val( $('#' + fields[i]).style.top  );
-        $('#' + fields[i] + '_left').val( $('#' + fields[i]).style.left  );
+        $('#' + fields[i] + '_top').val( $('#' + fields[i]).css('top')  );
+        $('#' + fields[i] + '_left').val( $('#' + fields[i]).css('left')  );
         
         if(fields[i]!='barcode'){
-            $('#' + fields[i] + '_width').val( $('#' + fields[i]).style.width  );
-            $('#' + fields[i] + '_fontFamily').val( $('#' + fields[i]).style.fontFamily  );
-            $('#' + fields[i] + '_fontSize').val( $('#' + fields[i]).style.fontSize  );
-            $('#' + fields[i] + '_fontWeight').val( $('#' + fields[i]).style.fontWeight  );
-            $('#' + fields[i] + '_fontStyle').val( $('#' + fields[i]).style.fontStyle  );
-            $('#' + fields[i] + '_textAlign').val( $('#' + fields[i]).style.textAlign  );
+            $('#' + fields[i] + '_width').val( $('#' + fields[i]).css('width')  );
+            $('#' + fields[i] + '_fontFamily').val( $('#' + fields[i]).css('font-family')  );
+            $('#' + fields[i] + '_fontSize').val( $('#' + fields[i]).css('font-size').substring(0,2)  );
+            $('#' + fields[i] + '_fontWeight').val( $('#' + fields[i]).css('font-weight')  );
+            $('#' + fields[i] + '_fontStyle').val( $('#' + fields[i]).css('font-style')  );
+            $('#' + fields[i] + '_textAlign').val( $('#' + fields[i]).css('text-align')  );
         }
     }
 
