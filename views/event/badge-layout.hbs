@@ -319,12 +319,12 @@ $(document).ready(function(){
     var topIndex=0;
 
     {{#each fields}}
-    $("#{{this.fieldName}}").style.left = {{this.fieldLeft}};
-    $("#{{this.fieldName}}").style.top = {{this.fieldTop}};
-    $("#{{this.fieldName}}").style.fontFamily = {{this.fieldFontFamily}};
-    $("#{{this.fieldName}}").style.fontSize = {{this.fieldFontSize}};
-    $("#{{this.fieldName}}").style.fontWeight = {{this.fieldFontWeight}};
-    $("#{{this.fieldName}}").style.fontStyle = {{this.fieldFontStyle}};
+    $("#{{this.fieldName}}").css('left', {{this.fieldLeft}});
+    $("#{{this.fieldName}}").css('top', {{this.fieldTop}});
+    $("#{{this.fieldName}}").css('font-family','{{this.fieldFontFamily}}')';
+    $("#{{this.fieldName}}").css('font-size','{{this.fieldFontSize}}')';
+    $("#{{this.fieldName}}").css('font-weight','{{this.fieldFontWeight}}')';
+    $("#{{this.fieldName}}").css('font-style','{{this.fieldFontStyle}}')';
 
 
 
