@@ -138,7 +138,7 @@
         <div id="badgeCanvas">
 
             {{#each fields}}
-            <div id="{{this.fieldName}}" class="canvas" style="
+            <span id="{{this.fieldName}}" class="canvas" style="
             left: {{this.fieldLeft}}; 
             top: {{this.fieldTop}}; 
             font-family: '{{this.fieldFontFamily}}'; 
@@ -148,7 +148,7 @@
             text-align: '{{this.fieldTextAlign}}';
             ">
                 {{toUpperCase this.fieldLabel}}
-            </div>
+            </span>
 
             {{/each}}         
 
@@ -244,9 +244,20 @@ $('#fontStyle').on('change', function(){
 
 $('#textAlign').on('change', function(){
     if(activeObject){
-        activeObject.style.textAlign=this.value;
-        activeObject.style.width='100%';
-        activeObject.style.left=0;
+        if(this.value=='center'){
+            activeObject.style.display='block';
+            activeObject.style.textAlign=this.value;
+        }
+        else if(this.value=='left'){
+            activeObject.style.display='inline';
+            activeObject.style.textAlign=this.value;
+            activeObject.style.marginRight='auto';
+        }
+        else if(this.value=='right'){
+            activeObject.style.display='inline';
+            activeObject.style.textAlign=this.value;
+            activeObject.style.marginLeft='auto';
+        }
     }
     else {
         alert('Please select an item on the canvas first');
