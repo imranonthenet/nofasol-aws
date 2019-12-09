@@ -290,12 +290,12 @@ var resetLayout = function(){
 
     {{#each fields}}
     topIndex = {{@index}};
-    $("#{{this.fieldName}}").style.left = 10;
-    $("#{{this.fieldName}}").style.top = (topIndex+1) * 20;
-    $("#{{this.fieldName}}").style.fontFamily = 'Calibri';
-    $("#{{this.fieldName}}").style.fontSize = '11px';
-    $("#{{this.fieldName}}").style.fontWeight = 'normal';
-    $("#{{this.fieldName}}").style.fontStyle = 'normal';
+    $("#{{this.fieldName}}").css('left',10);
+    $("#{{this.fieldName}}").css('top', (topIndex+1) * 20);
+    $("#{{this.fieldName}}").css('font-family', 'Calibri');
+    $("#{{this.fieldName}}").css('font-size', '11px');
+    $("#{{this.fieldName}}").css('font-weight','normal');
+    $("#{{this.fieldName}}").css('font-style', 'normal');
     {{/each}}
 
 }
@@ -322,7 +322,7 @@ $(document).ready(function(){
     $("#{{this.fieldName}}").css('left', {{this.fieldLeft}});
     $("#{{this.fieldName}}").css('top', {{this.fieldTop}});
     $("#{{this.fieldName}}").css('font-family','{{this.fieldFontFamily}}');
-    $("#{{this.fieldName}}").css('font-size','{{this.fieldFontSize}}');
+    $("#{{this.fieldName}}").css('font-size','{{this.fieldFontSize}}px');
     $("#{{this.fieldName}}").css('font-weight','{{this.fieldFontWeight}}');
     $("#{{this.fieldName}}").css('font-style','{{this.fieldFontStyle}}');
 
