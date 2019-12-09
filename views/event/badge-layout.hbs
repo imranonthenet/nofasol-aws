@@ -135,10 +135,10 @@
         -->
       
         
-        <div id="badgeCanvas" width="559" height="794" style="border: 1px solid black;" class="canvas">
+        <div id="badgeCanvas">
 
             {{#each fields}}
-            <span id="{{this.fieldName}}" style="
+            <span id="{{this.fieldName}}" class="canvas" style="
             left: {{this.fieldLeft}}; 
             top: {{this.fieldTop}}; 
             width: {{this.fieldWidth}}; 
@@ -192,9 +192,9 @@
 var fields = [];
 var activeObject=null;
 
-$('.canvas').click(function(event){
+$('.canvas').on('click', function(event){
     console.log(event.target.style);
-    
+
     activeObject=event.target;
 
     $('#fontFamily').val(event.target.style.fontFamily);
