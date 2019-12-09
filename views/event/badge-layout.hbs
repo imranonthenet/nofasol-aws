@@ -248,6 +248,7 @@ $('#textAlign').on('change', function(){
             activeObject.style.display='block';
             activeObject.style.textAlign=this.value;
             activeObject.style.left=0;
+            activeObject.style.cssFloat='none';
         }
         else if(this.value=='left'){
             activeObject.style.display='inline';
