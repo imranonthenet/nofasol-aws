@@ -252,14 +252,12 @@ $('#textAlign').on('change', function(){
         else if(this.value=='left'){
             activeObject.style.display='inline';
             activeObject.style.textAlign=this.value;
-            activeObject.style.marginRight='auto';
-            activeObject.style.left=0;
+            activeObject.style.cssFloat='left';
         }
         else if(this.value=='right'){
             activeObject.style.display='inline';
             activeObject.style.textAlign=this.value;
-            activeObject.style.marginLeft='auto';
-            activeObject.style.left=0;
+            activeObject.style.cssFloat='right';
         }
     }
     else {
