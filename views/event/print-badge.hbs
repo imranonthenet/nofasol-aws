@@ -11,11 +11,15 @@
             1748 pixels x 2480 pixels (print resolution) 
             420 pixels x 595 pixels (screen resolution)
         -->
-        <div id="badgeCanvas" width="559" height="794">
+        <div id="badgeCanvas" style="
+            width: 559px;
+            height:794px;
+            padding: 5px;
+        ">
 
             {{#each fields}}
             <span id="{{this.fieldName}}" style="
-            position:absolute;
+            position:absolute; cursor: move;
             left: {{this.fieldLeft}}; 
             top: {{this.fieldTop}}; 
             width: {{this.fieldWidth}}; 
