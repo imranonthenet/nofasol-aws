@@ -139,11 +139,10 @@
             width: 559px;
             height:794px;
             border:1px solid #000;
-            padding: 5px;
         ">
 
             {{#each fields}}
-            <span id="{{this.fieldName}}" class="canvas" style="position:absolute; cursor: move;">
+            <span id="{{this.fieldName}}" class="canvas" style="position:absolute; cursor: move; border:1px solid #888;">
                 {{toUpperCase this.fieldLabel}}
             </span>
 
@@ -246,18 +245,25 @@ $('#textAlign').on('change', function(){
         
 
         if(this.value=='center'){
-            activeObject.style.display='block';
+            activeObject.style.display='inline';
             activeObject.style.cssFloat='none';
-            activeObject.style.left='0px';
+            activeObject.style.left='16px';
+            activeObject.style.position='absolute';
+            activeObject.style.width='557px';
         }
         else if(this.value=='left'){
             activeObject.style.display='inline';
             activeObject.style.cssFloat='none';
+            activeObject.style.left='16px';
+            activeObject.style.position='absolute';
+            activeObject.style.width='auto';
         }
         else if(this.value=='right'){
-            activeObject.style.display='block';
-            activeObject.style.cssFloat='right';
-            activeObject.style.left='0px';
+            activeObject.style.display='inline';
+            activeObject.style.cssFloat='none';
+            activeObject.style.left='16px';
+            activeObject.style.position='absolute';
+            activeObject.style.width='557px';
         }
         
     }
@@ -321,17 +327,17 @@ $(document).ready(function(){
 
 
 
-    /*
-    JsBarcode("#barcode", "19299259221626", {
-    format: "CODE128",
-    width: 1,
-    height:40,
-    margin: 5,
-    textMargin: 0,
-    fontSize: 10,
-    displayValue: true
-    });
-    */
+    {{#if showBarcode}}
+      JsBarcode("#barcode", "12345678901234", {
+      format: "CODE128",
+      width: 2,
+      height:40,
+      margin: 5,
+      textMargin: 0,
+      fontSize: 16,
+      displayValue: true
+      });
+    {{/if}}
     
     var topIndex=0;
 
@@ -346,20 +352,27 @@ $(document).ready(function(){
 
 
     if('{{this.fieldTextAlign}}'=='center'){
-        $("#{{this.fieldName}}").css('display','block');
-        $("#{{this.fieldName}}").css('left','0px');
+        $("#{{this.fieldName}}").css('display','inline');
+        $("#{{this.fieldName}}").css('left','16px');
         $("#{{this.fieldName}}").css('float','none');
+        $("#{{this.fieldName}}").css('position','absolute');
+        $("#{{this.fieldName}}").css('width','557px');
     }
     else if('{{this.fieldTextAlign}}'=='left'){
         $("#{{this.fieldName}}").css('display','inline');
         $("#{{this.fieldName}}").css('float','none');
+        $("#{{this.fieldName}}").css('position','absolute');
+        $("#{{this.fieldName}}").css('width','auto');
     }
     else if('{{this.fieldTextAlign}}'=='right'){
-        $("#{{this.fieldName}}").css('display','block');
-        $("#{{this.fieldName}}").css('left','0px');
-        $("#{{this.fieldName}}").css('float','right');
+        $("#{{this.fieldName}}").css('display','inline');
+        $("#{{this.fieldName}}").css('left','16px');
+        $("#{{this.fieldName}}").css('float','none');
+        $("#{{this.fieldName}}").css('position','absolute');
+        $("#{{this.fieldName}}").css('width','557px');
     }
     
+
 
 
     $("#{{this.fieldName}}").draggable({

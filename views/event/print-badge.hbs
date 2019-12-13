@@ -14,7 +14,6 @@
         <div id="badgeCanvas" style="
             width: 559px;
             height:794px;
-            padding: 5px;
         ">
 
             {{#each fields}}
@@ -82,20 +81,25 @@ var fields = [];
 
 
     if('{{this.fieldTextAlign}}'=='center'){
-        $("#{{this.fieldName}}").css('display','block');
-        $("#{{this.fieldName}}").css('left','0px');
+        $("#{{this.fieldName}}").css('display','inline');
+        $("#{{this.fieldName}}").css('left','16px');
         $("#{{this.fieldName}}").css('float','none');
+        $("#{{this.fieldName}}").css('position','absolute');
+        $("#{{this.fieldName}}").css('width','557px');
     }
     else if('{{this.fieldTextAlign}}'=='left'){
         $("#{{this.fieldName}}").css('display','inline');
         $("#{{this.fieldName}}").css('float','none');
+        $("#{{this.fieldName}}").css('position','absolute');
+        $("#{{this.fieldName}}").css('width','auto');
     }
     else if('{{this.fieldTextAlign}}'=='right'){
-        $("#{{this.fieldName}}").css('display','block');
-        $("#{{this.fieldName}}").css('left','0px');
-        $("#{{this.fieldName}}").css('float','right');
+        $("#{{this.fieldName}}").css('display','inline');
+        $("#{{this.fieldName}}").css('left','16px');
+        $("#{{this.fieldName}}").css('float','none');
+        $("#{{this.fieldName}}").css('position','absolute');
+        $("#{{this.fieldName}}").css('width','557px');
     }
-    
 
 
 
