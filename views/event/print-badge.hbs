@@ -15,6 +15,7 @@
 
             {{#each fields}}
             <span id="{{this.fieldName}}" style="
+            position:absolute;
             left: {{this.fieldLeft}}; 
             top: {{this.fieldTop}}; 
             width: {{this.fieldWidth}}; 
@@ -31,6 +32,7 @@
 
             {{#if showBarcode}}
             <img id="barcode" style="
+            position:absolute;
             left: {{barcodeLeft}};
             top: {{barcodeTop}};
             " >

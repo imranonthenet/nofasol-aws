@@ -138,7 +138,7 @@
         <div id="badgeCanvas">
 
             {{#each fields}}
-            <span id="{{this.fieldName}}" class="canvas">
+            <span id="{{this.fieldName}}" class="canvas" style="position:absolute;">
                 {{toUpperCase this.fieldLabel}}
             </span>
 
@@ -146,6 +146,7 @@
 
             {{#if showBarcode}}
             <img id="barcode" src="/images/barcode.png" style="
+            position:absolute;
             left: {{barcodeLeft}};
             top: {{barcodeTop}};
             " >
