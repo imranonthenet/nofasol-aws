@@ -306,7 +306,10 @@ router.post('/badge-layout', function(req,res){
 
         event.setupComplete = true;
         event.save(function(err, result){
-            
+            if(err){
+                console.log(err);
+            }
+
             if(req.body.action == 'testprint'){
                 req.session.eventIdForPrint = eventId;
                 res.redirect('/event/badge-layout');

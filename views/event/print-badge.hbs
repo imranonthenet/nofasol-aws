@@ -11,28 +11,45 @@
             1748 pixels x 2480 pixels (print resolution) 
             420 pixels x 595 pixels (screen resolution)
         -->
-        <canvas id="badgeCanvas" width="559" height="794" ></canvas>
-        
-        {{#if showBarcode}}
-          <img id="barcode" style="display: none" >
+        <div id="badgeCanvas" width="559" height="794">
 
-        {{/if}}
+            {{#each fields}}
+            <span id="{{this.fieldName}}" style="
+            left: {{this.fieldLeft}}; 
+            top: {{this.fieldTop}}; 
+            width: {{this.fieldWidth}}; 
+            font-family: '{{this.fieldFontFamily}}'; 
+            font-size: {{this.fieldFontSize}};
+            font-weight: '{{this.fieldFontWeight}}';
+            font-style: '{{this.fieldFontStyle}}';
+            text-align: '{{this.fieldTextAlign}}';
+            ">
+                {{toUpperCase this.fieldLabel}}
+            </span>
 
-          
+            {{/each}}         
+
+            {{#if showBarcode}}
+            <img id="barcode" style="
+            left: {{barcodeLeft}};
+            top: {{barcodeTop}};
+            " >
+            {{/if}}
+
+        </div> 
       
     </div>
 
 </div>
 
 
-<script src="/library/jquery-3.3.1.min.js"></script>
-<script src="/library/fabric.min.js"></script>
-<script src="/library/JsBarcode.all.min.js"></script>
 
 <script>
 
+
+
+$(document).ready(function(){
 var fields = [];
-var canvas = new fabric.Canvas('badgeCanvas');
 
     {{#if showBarcode}}
       JsBarcode("#barcode", "{{barcode}}", {
@@ -46,44 +63,68 @@ var canvas = new fabric.Canvas('badgeCanvas');
       });
     {{/if}}
 
-$(document).ready(function(){
-
-    
-    var topIndex=0;
+ var topIndex=0;
 
     {{#each fields}}
-    topIndex = {{@index}};
-    
-    var {{this.fieldName}} = new fabric.Textbox('{{toUpperCase this.fieldValue}}', {
-        left: {{this.fieldLeft}},
-        top: {{this.fieldTop}},
-        width: {{this.fieldWidth}},
-        angle: 0,
-        opacity: 1,
-        fontFamily: '{{this.fieldFontFamily}}',
-        fontSize: {{this.fieldFontSize}},
-        fontWeight: '{{this.fieldFontWeight}}',
-        fontStyle: '{{this.fieldFontStyle}}',
-        textAlign: '{{this.fieldTextAlign}}'
-        });
+    $("#{{this.fieldName}}").css('left', '{{this.fieldLeft}}px' );
+    $("#{{this.fieldName}}").css('top', '{{this.fieldTop}}px'  );
+    $("#{{this.fieldName}}").css('font-family','{{this.fieldFontFamily}}');
+    $("#{{this.fieldName}}").css('font-size','{{this.fieldFontSize}}px' );
+    $("#{{this.fieldName}}").css('font-weight','{{this.fieldFontWeight}}');
+    $("#{{this.fieldName}}").css('font-style','{{this.fieldFontStyle}}');
+    $("#{{this.fieldName}}").css('text-align','{{this.fieldTextAlign}}');
 
-    canvas.add({{this.fieldName}}); 
+
+    if('{{this.fieldTextAlign}}'=='center'){
+        $("#{{this.fieldName}}").css('display','block');
+        $("#{{this.fieldName}}").css('left','0px');
+        $("#{{this.fieldName}}").css('float','none');
+    }
+    else if('{{this.fieldTextAlign}}'=='left'){
+        $("#{{this.fieldName}}").css('display','inline');
+        $("#{{this.fieldName}}").css('float','none');
+    }
+    else if('{{this.fieldTextAlign}}'=='right'){
+        $("#{{this.fieldName}}").css('display','block');
+        $("#{{this.fieldName}}").css('left','0px');
+        $("#{{this.fieldName}}").css('float','right');
+    }
+    
+
+
+    $("#{{this.fieldName}}").draggable({
+        containment: "#badgeCanvas",
+        scroll: false,
+        stop: function (event, ui) {
+            
+            console.log(ui);
+            
+        }
+    });
+
     fields.push('{{this.fieldName}}');
 
     {{/each}}
 
     {{#if showBarcode}}
-        topIndex = topIndex + 100;
-        var imgElement = document.getElementById('barcode');
-        var imgInstance = new fabric.Image(imgElement, {
-        left: {{barcodeLeft}},
-        top: {{barcodeTop}},
-        angle: 0,
-        opacity: 1
+
+        $("#barcode").css('left', '{{barcodeLeft}}px' );
+        $("#barcode").css('top', '{{barcodeTop}}px'  );
+
+        $("#barcode").draggable({
+            containment: "#badgeCanvas",
+            scroll: false,
+            stop: function (event, ui) {
+                
+                console.log(ui);
+                
+            }
         });
-        canvas.add(imgInstance);
+
         fields.push('barcode');
     {{/if}}
+
+
 
       window.print();
       

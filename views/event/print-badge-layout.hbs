@@ -33,7 +33,10 @@
             {{/each}}         
 
             {{#if showBarcode}}
-            <img id="barcode" src="/images/barcode.png" style="display: none" >
+            <img id="barcode" src="/images/barcode.png" style="
+            left: {{barcodeLeft}};
+            top: {{barcodeTop}};
+            " >
             {{/if}}
 
         </div>        
@@ -47,12 +50,7 @@
 </div>
 
 
-<script src="/library/jquery-3.3.1.min.js"></script>
-<script src="/library/JsBarcode.all.min.js"></script>
-
 <script>
-
-var fields = [];
 
 
 
@@ -68,11 +66,36 @@ $(document).ready(function(){
     displayValue: true
     });
     */
-    
-    var topIndex=0;
+var fields = [];
+
+ var topIndex=0;
 
     {{#each fields}}
-    topIndex = {{@index}};
+    $("#{{this.fieldName}}").css('left', '{{this.fieldLeft}}px' );
+    $("#{{this.fieldName}}").css('top', '{{this.fieldTop}}px'  );
+    $("#{{this.fieldName}}").css('font-family','{{this.fieldFontFamily}}');
+    $("#{{this.fieldName}}").css('font-size','{{this.fieldFontSize}}px' );
+    $("#{{this.fieldName}}").css('font-weight','{{this.fieldFontWeight}}');
+    $("#{{this.fieldName}}").css('font-style','{{this.fieldFontStyle}}');
+    $("#{{this.fieldName}}").css('text-align','{{this.fieldTextAlign}}');
+
+
+    if('{{this.fieldTextAlign}}'=='center'){
+        $("#{{this.fieldName}}").css('display','block');
+        $("#{{this.fieldName}}").css('left','0px');
+        $("#{{this.fieldName}}").css('float','none');
+    }
+    else if('{{this.fieldTextAlign}}'=='left'){
+        $("#{{this.fieldName}}").css('display','inline');
+        $("#{{this.fieldName}}").css('float','none');
+    }
+    else if('{{this.fieldTextAlign}}'=='right'){
+        $("#{{this.fieldName}}").css('display','block');
+        $("#{{this.fieldName}}").css('left','0px');
+        $("#{{this.fieldName}}").css('float','right');
+    }
+    
+
 
     $("#{{this.fieldName}}").draggable({
         containment: "#badgeCanvas",
@@ -88,6 +111,23 @@ $(document).ready(function(){
 
     {{/each}}
 
+    {{#if showBarcode}}
+
+        $("#barcode").css('left', '{{barcodeLeft}}px' );
+        $("#barcode").css('top', '{{barcodeTop}}px'  );
+
+        $("#barcode").draggable({
+            containment: "#badgeCanvas",
+            scroll: false,
+            stop: function (event, ui) {
+                
+                console.log(ui);
+                
+            }
+        });
+
+        fields.push('barcode');
+    {{/if}}
 
 
     window.print();

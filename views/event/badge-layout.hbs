@@ -138,15 +138,7 @@
         <div id="badgeCanvas">
 
             {{#each fields}}
-            <span id="{{this.fieldName}}" class="canvas" style="
-            left: {{this.fieldLeft}}; 
-            top: {{this.fieldTop}}; 
-            font-family: '{{this.fieldFontFamily}}'; 
-            font-size: {{this.fieldFontSize}};
-            font-weight: '{{this.fieldFontWeight}}';
-            font-style: '{{this.fieldFontStyle}}';
-            text-align: '{{this.fieldTextAlign}}';
-            ">
+            <span id="{{this.fieldName}}" class="canvas">
                 {{toUpperCase this.fieldLabel}}
             </span>
 
@@ -185,7 +177,7 @@
 <script>
 
     {{#if session.eventIdForPrint}}
-        window.open('/event/print-badge-layout/', '_blank', '');
+        window.open('/event/print-badge-layout/{{session.eventId}}', '_blank', '');
     {{/if}}
 
 var fields = [];
@@ -245,20 +237,23 @@ $('#fontStyle').on('change', function(){
 $('#textAlign').on('change', function(){
     if(activeObject){
         activeObject.style.textAlign=this.value;
-        activeObject.style.left=0;
+        
 
         if(this.value=='center'){
             activeObject.style.display='block';
             activeObject.style.cssFloat='none';
+            activeObject.style.left='0px';
         }
         else if(this.value=='left'){
             activeObject.style.display='inline';
-            activeObject.style.cssFloat='left';
+            activeObject.style.cssFloat='none';
         }
         else if(this.value=='right'){
-            activeObject.style.display='inline';
+            activeObject.style.display='block';
             activeObject.style.cssFloat='right';
+            activeObject.style.left='0px';
         }
+        
     }
     else {
         alert('Please select an item on the canvas first');
@@ -282,12 +277,12 @@ var submitForm = function(){
     //$('#fullName_width').val(txtFullName.width);
 
     for(var i=0; i<fields.length; i++){
-        $('#' + fields[i] + '_top').val( $('#' + fields[i]).css('top')  );
-        $('#' + fields[i] + '_left').val( $('#' + fields[i]).css('left')  );
+        $('#' + fields[i] + '_top').val( $('#' + fields[i]).css('top').replace(/px/g,'')  );
+        $('#' + fields[i] + '_left').val( $('#' + fields[i]).css('left').replace(/px/g,'')  );
         
         if(fields[i]!='barcode'){
-            $('#' + fields[i] + '_width').val( $('#' + fields[i]).css('width')  );
-            $('#' + fields[i] + '_fontFamily').val( $('#' + fields[i]).css('font-family')  );
+            $('#' + fields[i] + '_width').val( $('#' + fields[i]).css('width').replace(/px/g,'')  );
+            $('#' + fields[i] + '_fontFamily').val( $('#' + fields[i]).css('font-family').replace(/"/g,'')  );
             $('#' + fields[i] + '_fontSize').val( $('#' + fields[i]).css('font-size').substring(0,2)  );
             $('#' + fields[i] + '_fontWeight').val( $('#' + fields[i]).css('font-weight')  );
             $('#' + fields[i] + '_fontStyle').val( $('#' + fields[i]).css('font-style')  );
@@ -335,10 +330,10 @@ $(document).ready(function(){
     var topIndex=0;
 
     {{#each fields}}
-    $("#{{this.fieldName}}").css('left', {{this.fieldLeft}});
-    $("#{{this.fieldName}}").css('top', {{this.fieldTop}});
+    $("#{{this.fieldName}}").css('left', '{{this.fieldLeft}}px' );
+    $("#{{this.fieldName}}").css('top', '{{this.fieldTop}}px'  );
     $("#{{this.fieldName}}").css('font-family','{{this.fieldFontFamily}}');
-    $("#{{this.fieldName}}").css('font-size','{{this.fieldFontSize}}px');
+    $("#{{this.fieldName}}").css('font-size','{{this.fieldFontSize}}px' );
     $("#{{this.fieldName}}").css('font-weight','{{this.fieldFontWeight}}');
     $("#{{this.fieldName}}").css('font-style','{{this.fieldFontStyle}}');
     $("#{{this.fieldName}}").css('text-align','{{this.fieldTextAlign}}');
@@ -346,17 +341,16 @@ $(document).ready(function(){
 
     if('{{this.fieldTextAlign}}'=='center'){
         $("#{{this.fieldName}}").css('display','block');
-        $("#{{this.fieldName}}").css('left',0);
+        $("#{{this.fieldName}}").css('left','0px');
         $("#{{this.fieldName}}").css('float','none');
     }
     else if('{{this.fieldTextAlign}}'=='left'){
         $("#{{this.fieldName}}").css('display','inline');
-        $("#{{this.fieldName}}").css('left',0);
-        $("#{{this.fieldName}}").css('float','left');
+        $("#{{this.fieldName}}").css('float','none');
     }
-    if('{{this.fieldTextAlign}}'=='right'){
-        $("#{{this.fieldName}}").css('display','inline');
-        $("#{{this.fieldName}}").css('left',0);
+    else if('{{this.fieldTextAlign}}'=='right'){
+        $("#{{this.fieldName}}").css('display','block');
+        $("#{{this.fieldName}}").css('left','0px');
         $("#{{this.fieldName}}").css('float','right');
     }
     
@@ -376,6 +370,23 @@ $(document).ready(function(){
 
     {{/each}}
 
+    {{#if showBarcode}}
+
+        $("#barcode").css('left', '{{barcodeLeft}}px' );
+        $("#barcode").css('top', '{{barcodeTop}}px'  );
+
+        $("#barcode").draggable({
+            containment: "#badgeCanvas",
+            scroll: false,
+            stop: function (event, ui) {
+                
+                console.log(ui);
+                
+            }
+        });
+
+        fields.push('barcode');
+    {{/if}}
 
 
 });
