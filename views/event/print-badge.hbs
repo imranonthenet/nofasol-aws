@@ -98,15 +98,6 @@ var fields = [];
     
 
 
-    $("#{{this.fieldName}}").draggable({
-        containment: "#badgeCanvas",
-        scroll: false,
-        stop: function (event, ui) {
-            
-            console.log(ui);
-            
-        }
-    });
 
     fields.push('{{this.fieldName}}');
 
@@ -117,15 +108,7 @@ var fields = [];
         $("#barcode").css('left', '{{barcodeLeft}}px' );
         $("#barcode").css('top', '{{barcodeTop}}px'  );
 
-        $("#barcode").draggable({
-            containment: "#badgeCanvas",
-            scroll: false,
-            stop: function (event, ui) {
-                
-                console.log(ui);
-                
-            }
-        });
+
 
         fields.push('barcode');
     {{/if}}
