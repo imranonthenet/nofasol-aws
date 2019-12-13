@@ -153,6 +153,10 @@ router.get('/badge-layout', function(req,res){
                     event[fieldTop] = fieldTopValue.toString();
                 }
                 
+                if(event[fieldLeft]==10){
+                    event[fieldLeft] = 20;
+                }
+
                 field['fieldTop']=event[fieldTop];
                 field['fieldLeft']=event[fieldLeft];
                 field['fieldWidth']=event[fieldWidth];
