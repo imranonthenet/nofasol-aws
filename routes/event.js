@@ -133,6 +133,7 @@ router.get('/badge-layout', function(req,res){
             
                 var fieldLeft = item.substring(0, item.indexOf('_showInPrint') ) + '_left';
                 var fieldWidth = item.substring(0, item.indexOf('_showInPrint') ) + '_width';
+                var fieldRotate = item.substring(0, item.indexOf('_showInPrint') ) + '_rotate';
                 var fieldFontFamily = item.substring(0, item.indexOf('_showInPrint') ) + '_fontFamily';
                 var fieldFontSize = item.substring(0, item.indexOf('_showInPrint') ) + '_fontSize';
                 var fieldFontWeight = item.substring(0, item.indexOf('_showInPrint') ) + '_fontWeight';
@@ -160,6 +161,7 @@ router.get('/badge-layout', function(req,res){
                 field['fieldTop']=event[fieldTop];
                 field['fieldLeft']=event[fieldLeft];
                 field['fieldWidth']=event[fieldWidth];
+                field['fieldRotate']=event[fieldRotate];
                 field['fieldFontFamily']=event[fieldFontFamily];
                 field['fieldFontSize']=event[fieldFontSize];
                 field['fieldFontWeight']=event[fieldFontWeight];
@@ -225,6 +227,7 @@ router.get('/print-badge-layout/:id', function(req,res){
             
                 var fieldLeft = item.substring(0, item.indexOf('_showInPrint') ) + '_left';
                 var fieldWidth = item.substring(0, item.indexOf('_showInPrint') ) + '_width';
+                var fieldRotate = item.substring(0, item.indexOf('_showInPrint') ) + '_rotate';
                 var fieldFontFamily = item.substring(0, item.indexOf('_showInPrint') ) + '_fontFamily';
                 var fieldFontSize = item.substring(0, item.indexOf('_showInPrint') ) + '_fontSize';
                 var fieldFontWeight = item.substring(0, item.indexOf('_showInPrint') ) + '_fontWeight';
@@ -248,6 +251,7 @@ router.get('/print-badge-layout/:id', function(req,res){
                 field['fieldTop']=event[fieldTop];
                 field['fieldLeft']=event[fieldLeft];
                 field['fieldWidth']=event[fieldWidth];
+                field['fieldRotate']=event[fieldRotate];
                 field['fieldFontFamily']=event[fieldFontFamily];
                 field['fieldFontSize']=event[fieldFontSize];
                 field['fieldFontWeight']=event[fieldFontWeight];
@@ -297,6 +301,7 @@ router.post('/badge-layout', function(req,res){
 
                 if(fieldName!='barcode'){
                     event[fieldName + '_width']=req.body[fieldName + '_width'];
+                    event[fieldName + '_rotate']=req.body[fieldName + '_rotate'];
                     event[fieldName + '_fontFamily']=req.body[fieldName + '_fontFamily'];
                     event[fieldName + '_fontSize']=req.body[fieldName + '_fontSize'];
                     event[fieldName + '_fontWeight']=req.body[fieldName + '_fontWeight'];
@@ -560,6 +565,24 @@ router.get('/attended/:id', function(req,res){
 
 });
 
+router.get('/didnotattend/:id', function(req,res){
+    var messages = [];
+    var eventId = req.session.eventId;
+    var eventDataId = req.params.id;
+
+    var query = {_id:eventDataId};
+    var currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
+    var update = {badgePrintDate:null, statusFlag:'Did Not Attend', username: req.user.email};
+    var options = {new:true};
+
+    EventData.findOneAndUpdate(query, update, options, function(err, eventData){
+        if(err) throw err;
+        
+        res.redirect('/event/registration/' + eventId);
+    });
+
+});
+
 router.get('/print-badge/:id', function(req,res){
     var messages = [];
     var eventId = req.session.eventId;
@@ -588,6 +611,7 @@ router.get('/print-badge/:id', function(req,res){
                     var fieldTop = item.substring(0, item.indexOf('_showInPrint') ) + '_top';
                     var fieldLeft = item.substring(0, item.indexOf('_showInPrint') ) + '_left';
                     var fieldWidth = item.substring(0, item.indexOf('_showInPrint') ) + '_width';
+                    var fieldRotate = item.substring(0, item.indexOf('_showInPrint') ) + '_rotate';
                     var fieldFontFamily = item.substring(0, item.indexOf('_showInPrint') ) + '_fontFamily';
                     var fieldFontSize = item.substring(0, item.indexOf('_showInPrint') ) + '_fontSize';
                     var fieldFontWeight = item.substring(0, item.indexOf('_showInPrint') ) + '_fontWeight';
@@ -605,6 +629,7 @@ router.get('/print-badge/:id', function(req,res){
                     field['fieldTop']=event[fieldTop];
                     field['fieldLeft']=event[fieldLeft];
                     field['fieldWidth']=event[fieldWidth];
+                    field['fieldRotate']=event[fieldRotate];
                     field['fieldFontFamily']=event[fieldFontFamily];
                     field['fieldFontSize']=event[fieldFontSize];
                     field['fieldFontWeight']=event[fieldFontWeight];
@@ -771,7 +796,7 @@ router.post('/register', function (req, res) {
         if(req.body.save){
             eventData.statusFlag='Did Not Attend';
         }
-        else if(req.body.printAndSave){ 
+        else if(req.body.printAndSave || req.body.attendAndSave){ 
             eventData.badgePrintDate = moment().format('YYYY-MM-DD HH:mm:ss');
             eventData.statusFlag = 'Attended';
         }
@@ -850,10 +875,11 @@ router.post('/edit-registration', function (req, res) {
             });
 
             eventData.modifiedDate=moment().format('YYYY-MM-DD HH:mm:ss');
-            eventData.statusFlag = 'Attended';
+            
 
-            if(req.body.printAndSave){ 
+            if(req.body.printAndSave || req.body.attendAndSave){ 
                 eventData.badgePrintDate = moment().format('YYYY-MM-DD HH:mm:ss');
+                eventData.statusFlag = 'Attended';
                 
             }
             eventData.username = req.user.email;
@@ -2258,7 +2284,7 @@ router.get('/registration/:id', function (req, res) {
         }
       
         req.session.eventLogo = event.eventLogo;
-        res.render('event/registration', { eventDataIdForPrint:eventDataIdForPrint, scripts:scripts, messages: messages, event: event, columns:columns });
+        res.render('event/registration', { eventDataIdForPrint:eventDataIdForPrint, scripts:scripts, messages: messages, event: event, columns:columns, isAdmin:req.user.role=='admin' });
 
     });
     

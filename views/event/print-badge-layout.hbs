@@ -20,21 +20,13 @@
         ">
 
             {{#each fields}}
-            <span id="{{this.fieldName}}" style="
-            position:absolute; cursor: move;
-            left: {{this.fieldLeft}}; 
-            top: {{this.fieldTop}}; 
-            width: {{this.fieldWidth}}; 
-            font-family: '{{this.fieldFontFamily}}'; 
-            font-size: {{this.fieldFontSize}};
-            font-weight: '{{this.fieldFontWeight}}';
-            font-style: '{{this.fieldFontStyle}}';
-            text-align: '{{this.fieldTextAlign}}';
-            ">
+            <span id="{{this.fieldName}}" class="canvas" style="position:absolute; ">
                 {{toUpperCase this.fieldLabel}}
             </span>
 
-            {{/each}}         
+            {{/each}} 
+
+       
 
             {{#if showBarcode}}
             <img id="barcode" src="/images/barcode.png" style="
@@ -85,6 +77,7 @@ var fields = [];
     $("#{{this.fieldName}}").css('font-style','{{this.fieldFontStyle}}');
     $("#{{this.fieldName}}").css('text-align','{{this.fieldTextAlign}}');
     $("#{{this.fieldName}}").css('width','{{this.fieldWidth}}px');
+    $("#{{this.fieldName}}").css({'transform': 'rotate({{this.fieldRotate}}deg)'  });
 
     /*
     if('{{this.fieldTextAlign}}'=='center'){

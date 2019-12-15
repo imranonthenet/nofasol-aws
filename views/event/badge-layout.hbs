@@ -102,6 +102,11 @@
             <input type="text" id="textWidth" maxlength="3" class="form-control" onkeypress="textWidth_OnKeyPress(event)">
         </div>
 
+        <div class="form-group">
+            <label>Rotate (degrees)</label>
+            <input type="text" id="textRotate" maxlength="3" class="form-control" onkeypress="textRotate_OnKeyPress(event)">
+        </div>
+
         <a href="/event/badge-categories/{{session.eventId}}" style="width:100px" class="btn btn-primary">Previous</a>&nbsp;&nbsp; 
         <input type="button" onclick="testPrint()" value="Test Print" style="width: 100px" class="btn btn-info ">&nbsp;&nbsp;       
         <input type="button" onclick="finish()" value="Finish" style="width: 100px" class="btn btn-success"><br><br>
@@ -130,6 +135,7 @@
         <input type="hidden" name="{{this.fieldName}}_fontWeight" id="{{this.fieldName}}_fontWeight">
         <input type="hidden" name="{{this.fieldName}}_fontStyle" id="{{this.fieldName}}_fontStyle">
         <input type="hidden" name="{{this.fieldName}}_textAlign" id="{{this.fieldName}}_textAlign">
+        <input type="hidden" name="{{this.fieldName}}_rotate" id="{{this.fieldName}}_rotate">
         {{/each}}
 
         <!-- A5 paper size -->
@@ -204,9 +210,46 @@ $('.canvas').on('click', function(event){
     $('#fontStyle').val(event.target.style.fontStyle);
     $('#textAlign').val(event.target.style.textAlign);
     $('#textWidth').val(event.target.style.width.replace(/px/g,''));
+
+    var angle = getAngle(activeObject);
+
+    console.log('Rotate: ' + angle + 'deg');
+    $('#textRotate').val(angle);
 });
 
+function getAngle(el){
+    //Get the matrix and calculate the Angle
+    var st = window.getComputedStyle(el, null);
+    var tr = st.getPropertyValue("-webkit-transform") ||
+            st.getPropertyValue("-moz-transform") ||
+            st.getPropertyValue("-ms-transform") ||
+            st.getPropertyValue("-o-transform") ||
+            st.getPropertyValue("transform") ||
+            "FAIL";
 
+    // With rotate(30deg)...
+    // matrix(0.866025, 0.5, -0.5, 0.866025, 0px, 0px)
+    console.log('Matrix: ' + tr);
+    if(tr=='none')
+        return 0;
+
+    // rotation matrix - http://en.wikipedia.org/wiki/Rotation_matrix
+
+    var values = tr.split('(')[1].split(')')[0].split(',');
+    var a = values[0];
+    var b = values[1];
+    var c = values[2];
+    var d = values[3];
+
+    var scale = Math.sqrt(a*a + b*b);
+
+    console.log('Scale: ' + scale);
+
+    // arc sin, convert from radians to degrees, round
+    var sin = b/scale;
+    var angle = Math.round(Math.atan2(b, a) * (180/Math.PI));
+    return angle;
+}
 
 
 $('#fontFamily').on('change', function(){
@@ -304,6 +347,29 @@ function textWidth_OnKeyPress(e){
     }
 }
 
+function textRotate_OnKeyPress(e){
+    
+    if(e.keyCode === 13){
+        e.preventDefault(); // Ensure it is only this code that rusn
+
+        if(isNaN(e.target.value)){
+            alert(e.target.value + ' is not a number');
+            return;
+        }
+        if(parseInt(e.target.value) > 360){
+            alert('Width cannot be more than 360 degrees');
+            return;
+        }
+
+        if(activeObject){
+            
+            activeObject.style.transform='rotate(' + e.target.value + 'deg)';
+        }
+        else {
+            alert('Please select an item on the canvas first');
+        }
+    }
+}
 
 
 var finish = function() {
@@ -333,6 +399,10 @@ var submitForm = function(){
             $('#' + fields[i] + '_fontWeight').val( $('#' + fields[i]).css('font-weight')  );
             $('#' + fields[i] + '_fontStyle').val( $('#' + fields[i]).css('font-style')  );
             $('#' + fields[i] + '_textAlign').val( $('#' + fields[i]).css('text-align')  );
+
+            var angle = getAngle(document.getElementById(fields[i]));
+            $('#' + fields[i] + '_rotate').val( angle  );
+            
         }
     }
 
@@ -353,6 +423,7 @@ var resetLayout = function(){
     $("#{{this.fieldName}}").css('font-style', 'normal');
     $("#{{this.fieldName}}").css('text-align', 'left');
     $("#{{this.fieldName}}").css('float', 'none');
+    $("#{{this.fieldName}}").css('transform','rotate:(0deg)');
     {{/each}}
 
 }
@@ -384,6 +455,9 @@ $(document).ready(function(){
     $("#{{this.fieldName}}").css('font-style','{{this.fieldFontStyle}}');
     $("#{{this.fieldName}}").css('text-align','{{this.fieldTextAlign}}');
     $("#{{this.fieldName}}").css('width','{{this.fieldWidth}}px');
+
+    $("#{{this.fieldName}}").css({'transform': 'rotate({{this.fieldRotate}}deg)'  });
+
 
     /*
     if('{{this.fieldTextAlign}}'=='center'){

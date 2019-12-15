@@ -31,6 +31,9 @@
             <button id="customDataTableEditRow" class="btn btn-primary">Edit</button>&nbsp;
             <button id="customDataTablePrintRow" class="btn btn-primary">Print</button>&nbsp;
             <button id="customDataTableAttendedRow" class="btn btn-primary">Attended</button>&nbsp;
+            {{#if isAdmin}}
+            <button id="customDataTableDitNotAttendRow" class="btn btn-primary">Did Not Attend</button>
+            {{/if}}
         </div>
 	</div>
 

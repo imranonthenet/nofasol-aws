@@ -24,6 +24,7 @@ var schema = new Schema({
     uniqueId_fontWeight: {type: String, default: 'normal'},
     uniqueId_fontStyle: {type: String, default: 'normal'},
     uniqueId_textAlign: {type: String, default: 'left'},
+    uniqueId_rotate: {type: Number, default: 0},
 
     barcode_fieldType: {type:String, default:'text'},
     barcode_label: {type:String, default:'Barcode'},
@@ -35,6 +36,7 @@ var schema = new Schema({
     barcode_columnInExcel: {type:String, default:'B'},
     barcode_top: {type:Number, default:10},
     barcode_left: {type:Number, default:10},
+    barcode_rotate: {type: Number, default: 0},
 
 
     sno_fieldType: {type:String, default:'text'},
@@ -53,6 +55,8 @@ var schema = new Schema({
     sno_fontWeight: {type: String, default: 'normal'},
     sno_fontStyle: {type: String, default: 'normal'},
     sno_textAlign: {type: String, default: 'left'},
+    sno_rotate: {type: Number, default: 0},
+
 
     title_fieldType: {type:String, default:'titles'},
     title_label: {type:String, default:'Title'},
@@ -70,6 +74,7 @@ var schema = new Schema({
     title_fontWeight: {type: String, default: 'normal'},
     title_fontStyle: {type: String, default: 'normal'},
     title_textAlign: {type: String, default: 'left'},
+    title_rotate: {type: Number, default: 0},
 
     firstName_fieldType: {type:String, default:'text'},
     firstName_label: {type:String, default:'First Name'},
@@ -87,6 +92,7 @@ var schema = new Schema({
     firstName_fontWeight: {type: String, default: 'normal'},
     firstName_fontStyle: {type: String, default: 'normal'},
     firstName_textAlign: {type: String, default: 'left'},
+    firstName_rotate: {type: Number, default: 0},
 
     middleName_fieldType: {type:String, default:'text'},
     middleName_label: {type:String, default:'Middle Name'},
@@ -104,6 +110,7 @@ var schema = new Schema({
     middleName_fontWeight: {type: String, default: 'normal'},
     middleName_fontStyle: {type: String, default: 'normal'},
     middleName_textAlign: {type: String, default: 'left'},
+    middleName_rotate: {type: Number, default: 0},
 
     lastName_fieldType: {type:String, default:'text'},
     lastName_label: {type:String, default:'Last Name'},
@@ -121,6 +128,7 @@ var schema = new Schema({
     lastName_fontWeight: {type: String, default: 'normal'},
     lastName_fontStyle: {type: String, default: 'normal'},
     lastName_textAlign: {type: String, default: 'left'},
+    lastName_rotate: {type: Number, default: 0},
 
 
     fullName_fieldType: {type:String, default:'text'},
@@ -141,6 +149,7 @@ var schema = new Schema({
     fullName_fontWeight: {type: String, default: 'normal'},
     fullName_fontStyle: {type: String, default: 'normal'},
     fullName_textAlign: {type: String, default: 'left'},
+    fullName_rotate: {type: Number, default: 0},
 
 
     jobTitle_fieldType: {type:String, default:'text'},
@@ -159,6 +168,7 @@ var schema = new Schema({
     jobTitle_fontWeight: {type: String, default: 'normal'},
     jobTitle_fontStyle: {type: String, default: 'normal'},
     jobTitle_textAlign: {type: String, default: 'left'},
+    jobTitle_rotate: {type: Number, default: 0},
 
 
     department_fieldType: {type:String, default:'text'},
@@ -177,6 +187,7 @@ var schema = new Schema({
     department_fontWeight: {type: String, default: 'normal'},
     department_fontStyle: {type: String, default: 'normal'},
     department_textAlign: {type: String, default: 'left'},
+    department_rotate: {type: Number, default: 0},
 
 
     companyName_fieldType: {type:String, default:'text'},
@@ -197,6 +208,7 @@ var schema = new Schema({
     companyName_fontWeight: {type: String, default: 'normal'},
     companyName_fontStyle: {type: String, default: 'normal'},
     companyName_textAlign: {type: String, default: 'left'},
+    companyName_rotate: {type: Number, default: 0},
 
 
     mobile1_fieldType: {type:String, default:'text'},
@@ -215,6 +227,7 @@ var schema = new Schema({
     mobile1_fontWeight: {type: String, default: 'normal'},
     mobile1_fontStyle: {type: String, default: 'normal'},
     mobile1_textAlign: {type: String, default: 'left'},
+    mobile1_rotate: {type: Number, default: 0},
 
     mobile2_fieldType: {type:String, default:'text'},
     mobile2_label: {type:String, default:'Mobile 2'},
@@ -232,6 +245,7 @@ var schema = new Schema({
     mobile2_fontWeight: {type: String, default: 'normal'},
     mobile2_fontStyle: {type: String, default: 'normal'},
     mobile2_textAlign: {type: String, default: 'left'},
+    mobile2_rotate: {type: Number, default: 0},
 
     tel1_fieldType: {type:String, default:'text'},
     tel1_label: {type:String, default:'Tel 1'},
@@ -249,6 +263,7 @@ var schema = new Schema({
     tel1_fontWeight: {type: String, default: 'normal'},
     tel1_fontStyle: {type: String, default: 'normal'},
     tel1_textAlign: {type: String, default: 'left'},
+    tel1_rotate: {type: Number, default: 0},
 
     tel2_fieldType: {type:String, default:'text'},
     tel2_label: {type:String, default:'Tel 2'},
@@ -266,6 +281,7 @@ var schema = new Schema({
     tel2_fontWeight: {type: String, default: 'normal'},
     tel2_fontStyle: {type: String, default: 'normal'},
     tel2_textAlign: {type: String, default: 'left'},
+    tel2_rotate: {type: Number, default: 0},
 
     fax_fieldType: {type:String, default:'text'},
     fax_label: {type:String, default:'Fax'},
@@ -283,6 +299,7 @@ var schema = new Schema({
     fax_fontWeight: {type: String, default: 'normal'},
     fax_fontStyle: {type: String, default: 'normal'},
     fax_textAlign: {type: String, default: 'left'},
+    fax_rotate: {type: Number, default: 0},
 
     email_fieldType: {type:String, default:'text'},
     email_label: {type:String, default:'Email'},
@@ -300,6 +317,7 @@ var schema = new Schema({
     email_fontWeight: {type: String, default: 'normal'},
     email_fontStyle: {type: String, default: 'normal'},
     email_textAlign: {type: String, default: 'left'},
+    email_rotate: {type: Number, default: 0},
 
     website_fieldType: {type:String, default:'text'},
     website_label: {type:String, default:'Website'},
@@ -317,6 +335,7 @@ var schema = new Schema({
     website_fontWeight: {type: String, default: 'normal'},
     website_fontStyle: {type: String, default: 'normal'},
     website_textAlign: {type: String, default: 'left'},
+    website_rotate: {type: Number, default: 0},
 
     address1_fieldType: {type:String, default:'text'},
     address1_label: {type:String, default:'Address 1'},
@@ -334,6 +353,7 @@ var schema = new Schema({
     address1_fontWeight: {type: String, default: 'normal'},
     address1_fontStyle: {type: String, default: 'normal'},
     address1_textAlign: {type: String, default: 'left'},
+    address1_rotate: {type: Number, default: 0},
 
     address2_fieldType: {type:String, default:'text'},
     address2_label: {type:String, default:'Address 2'},
@@ -351,6 +371,7 @@ var schema = new Schema({
     address2_fontWeight: {type: String, default: 'normal'},
     address2_fontStyle: {type: String, default: 'normal'},
     address2_textAlign: {type: String, default: 'left'},
+    address2_rotate: {type: Number, default: 0},
   
     city_fieldType: {type:String, default:'text'},
     city_label: {type:String, default:'City'},
@@ -368,6 +389,7 @@ var schema = new Schema({
     city_fontWeight: {type: String, default: 'normal'},
     city_fontStyle: {type: String, default: 'normal'},
     city_textAlign: {type: String, default: 'left'},
+    city_rotate: {type: Number, default: 0},
 
     country_fieldType: {type:String, default:'countries'},
     country_label: {type:String, default:'Country'},
@@ -385,6 +407,7 @@ var schema = new Schema({
     country_fontWeight: {type: String, default: 'normal'},
     country_fontStyle: {type: String, default: 'normal'},
     country_textAlign: {type: String, default: 'left'},
+    country_rotate: {type: Number, default: 0},
 
     poBox_fieldType: {type:String, default:'text'},
     poBox_label: {type:String, default:'P.O.Box'},
@@ -402,6 +425,7 @@ var schema = new Schema({
     poBox_fontWeight: {type: String, default: 'normal'},
     poBox_fontStyle: {type: String, default: 'normal'},
     poBox_textAlign: {type: String, default: 'left'},
+    poBox_rotate: {type: Number, default: 0},
 
     postalCode_fieldType: {type:String, default:'text'},
     postalCode_label: {type:String, default:'Postal Code'},
@@ -419,6 +443,7 @@ var schema = new Schema({
     postalCode_fontWeight: {type: String, default: 'normal'},
     postalCode_fontStyle: {type: String, default: 'normal'},
     postalCode_textAlign: {type: String, default: 'left'},
+    postalCode_rotate: {type: Number, default: 0},
 
     badgeCategory_fieldType: {type:String, default:'badgeCategories'},
     badgeCategory_label: {type:String, default:'Badge Category'},
@@ -436,6 +461,7 @@ var schema = new Schema({
     badgeCategory_fontWeight: {type: String, default: 'normal'},
     badgeCategory_fontStyle: {type: String, default: 'normal'},
     badgeCategory_textAlign: {type: String, default: 'left'},
+    badgeCategory_rotate: {type: Number, default: 0},
 
     regType_fieldType: {type:String, default:'list'},
     regType_label: {type:String, default:'Reg Type'},
@@ -453,6 +479,7 @@ var schema = new Schema({
     regType_fontWeight: {type: String, default: 'normal'},
     regType_fontStyle: {type: String, default: 'normal'},
     regType_textAlign: {type: String, default: 'left'},
+    regType_rotate: {type: Number, default: 0},
 
     regDate_fieldType: {type:String, default:'date'},
     regDate_label: {type:String, default:'Reg Date'},
@@ -470,6 +497,7 @@ var schema = new Schema({
     regDate_fontWeight: {type: String, default: 'normal'},
     regDate_fontStyle: {type: String, default: 'normal'},
     regDate_textAlign: {type: String, default: 'left'},
+    regDate_rotate: {type: Number, default: 0},
  
     badgePrintDate_fieldType: {type:String, default:'date'},
     badgePrintDate_label: {type:String, default:'Badge Print Date'},
@@ -487,6 +515,7 @@ var schema = new Schema({
     badgePrintDate_fontWeight: {type: String, default: 'normal'},
     badgePrintDate_fontStyle: {type: String, default: 'normal'},
     badgePrintDate_textAlign: {type: String, default: 'left'},
+    badgePrintDate_rotate: {type: Number, default: 0},
 
     modifiedDate_fieldType: {type:String, default:'date'},
     modifiedDate_label: {type:String, default:'Modified Date'},
@@ -504,6 +533,7 @@ var schema = new Schema({
     modifiedDate_fontWeight: {type: String, default: 'normal'},
     modifiedDate_fontStyle: {type: String, default: 'normal'},
     modifiedDate_textAlign: {type: String, default: 'left'},
+    modifiedDate_rotate: {type: Number, default: 0},
 
 
     statusFlag_fieldType: {type:String, default:'text'},
@@ -522,6 +552,7 @@ var schema = new Schema({
     statusFlag_fontWeight: {type: String, default: 'normal'},
     statusFlag_fontStyle: {type: String, default: 'normal'},
     statusFlag_textAlign: {type: String, default: 'left'},
+    statusFlag_rotate: {type: Number, default: 0},
 
 
     backoffice_fieldType: {type:String, default:'text'},
@@ -540,6 +571,7 @@ var schema = new Schema({
     backoffice_fontWeight: {type: String, default: 'normal'},
     backoffice_fontStyle: {type: String, default: 'normal'},
     backoffice_textAlign: {type: String, default: 'left'},
+    backoffice_rotate: {type: Number, default: 0},
 
 
     comment1_fieldType: {type:String, default:'text'},
@@ -558,6 +590,7 @@ var schema = new Schema({
     comment1_fontWeight: {type: String, default: 'normal'},
     comment1_fontStyle: {type: String, default: 'normal'},
     comment1_textAlign: {type: String, default: 'left'},
+    comment1_rotate: {type: Number, default: 0},
 
     comment2_fieldType: {type:String, default:'text'},
     comment2_label: {type:String, default:'Comment 2'},
@@ -575,6 +608,7 @@ var schema = new Schema({
     comment2_fontWeight: {type: String, default: 'normal'},
     comment2_fontStyle: {type: String, default: 'normal'},
     comment2_textAlign: {type: String, default: 'left'},
+    comment2_rotate: {type: Number, default: 0},
   
     comment3_fieldType: {type:String, default:'text'},
     comment3_label: {type:String, default:'Comment 3'},
@@ -592,6 +626,7 @@ var schema = new Schema({
     comment3_fontWeight: {type: String, default: 'normal'},
     comment3_fontStyle: {type: String, default: 'normal'},
     comment3_textAlign: {type: String, default: 'left'},
+    comment3_rotate: {type: Number, default: 0},
 
     comment4_fieldType: {type:String, default:'text'},
     comment4_label: {type:String, default:'Comment 4'},
@@ -609,6 +644,7 @@ var schema = new Schema({
     comment4_fontWeight: {type: String, default: 'normal'},
     comment4_fontStyle: {type: String, default: 'normal'},
     comment4_textAlign: {type: String, default: 'left'},
+    comment4_rotate: {type: Number, default: 0},
 
     comment5_fieldType: {type:String, default:'text'},
     comment5_label: {type:String, default:'Comment 5'},
@@ -626,6 +662,7 @@ var schema = new Schema({
     comment5_fontWeight: {type: String, default: 'normal'},
     comment5_fontStyle: {type: String, default: 'normal'},
     comment5_textAlign: {type: String, default: 'left'},
+    comment5_rotate: {type: Number, default: 0},
 
     comment6_fieldType: {type:String, default:'text'},
     comment6_label: {type:String, default:'Comment 6'},
@@ -643,6 +680,7 @@ var schema = new Schema({
     comment6_fontWeight: {type: String, default: 'normal'},
     comment6_fontStyle: {type: String, default: 'normal'},
     comment6_textAlign: {type: String, default: 'left'},
+    comment6_rotate: {type: Number, default: 0},
 
     comment7_fieldType: {type:String, default:'text'},
     comment7_label: {type:String, default:'Comment 7'},
@@ -660,6 +698,7 @@ var schema = new Schema({
     comment7_fontWeight: {type: String, default: 'normal'},
     comment7_fontStyle: {type: String, default: 'normal'},
     comment7_textAlign: {type: String, default: 'left'},
+    comment7_rotate: {type: Number, default: 0},
 
     comment8_fieldType: {type:String, default:'text'},
     comment8_label: {type:String, default:'Comment 8'},
@@ -677,6 +716,7 @@ var schema = new Schema({
     comment8_fontWeight: {type: String, default: 'normal'},
     comment8_fontStyle: {type: String, default: 'normal'},
     comment8_textAlign: {type: String, default: 'left'},
+    comment8_rotate: {type: Number, default: 0},
 
     comment9_fieldType: {type:String, default:'text'},
     comment9_label: {type:String, default:'Comment 9'},
@@ -694,6 +734,7 @@ var schema = new Schema({
     comment9_fontWeight: {type: String, default: 'normal'},
     comment9_fontStyle: {type: String, default: 'normal'},
     comment9_textAlign: {type: String, default: 'left'},
+    comment9_rotate: {type: Number, default: 0},
 
     comment10_fieldType: {type:String, default:'text'},
     comment10_label: {type:String, default:'Comment 10'},
@@ -711,6 +752,7 @@ var schema = new Schema({
     comment10_fontWeight: {type: String, default: 'normal'},
     comment10_fontStyle: {type: String, default: 'normal'},
     comment10_textAlign: {type: String, default: 'left'},
+    comment10_rotate: {type: Number, default: 0},
 
 
 });
