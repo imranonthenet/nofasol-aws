@@ -97,6 +97,11 @@
             </select>
         </div>
 
+        <div class="form-group">
+            <label>Width (max 557 pixels)</label>
+            <input type="text" id="textWidth" maxlength="3" class="form-control" onkeypress="textWidth_OnKeyPress(event)">
+        </div>
+
         <a href="/event/badge-categories/{{session.eventId}}" style="width:100px" class="btn btn-primary">Previous</a>&nbsp;&nbsp; 
         <input type="button" onclick="testPrint()" value="Test Print" style="width: 100px" class="btn btn-info ">&nbsp;&nbsp;       
         <input type="button" onclick="finish()" value="Finish" style="width: 100px" class="btn btn-success"><br><br>
@@ -198,6 +203,7 @@ $('.canvas').on('click', function(event){
     $('#fontWeight').val(event.target.style.fontWeight);
     $('#fontStyle').val(event.target.style.fontStyle);
     $('#textAlign').val(event.target.style.textAlign);
+    $('#textWidth').val(event.target.style.width.replace(/px/g,''));
 });
 
 
@@ -243,7 +249,7 @@ $('#textAlign').on('change', function(){
     if(activeObject){
         activeObject.style.textAlign=this.value;
         
-
+        /*
         if(this.value=='center'){
             activeObject.style.display='inline';
             activeObject.style.cssFloat='none';
@@ -265,12 +271,40 @@ $('#textAlign').on('change', function(){
             activeObject.style.position='absolute';
             activeObject.style.width='557px';
         }
+        */
         
     }
     else {
         alert('Please select an item on the canvas first');
     }
 });
+
+
+function textWidth_OnKeyPress(e){
+    
+    if(e.keyCode === 13){
+        e.preventDefault(); // Ensure it is only this code that rusn
+
+        if(isNaN(e.target.value)){
+            alert(e.target.value + ' is not a number');
+            return;
+        }
+        if(parseInt(e.target.value) > 557){
+            alert('Width cannot be more than 557 pixels');
+            return;
+        }
+
+        if(activeObject){
+            
+            activeObject.style.width=e.target.value + 'px';
+        }
+        else {
+            alert('Please select an item on the canvas first');
+        }
+    }
+}
+
+
 
 var finish = function() {
     $('#action').val('finish');
@@ -349,8 +383,9 @@ $(document).ready(function(){
     $("#{{this.fieldName}}").css('font-weight','{{this.fieldFontWeight}}');
     $("#{{this.fieldName}}").css('font-style','{{this.fieldFontStyle}}');
     $("#{{this.fieldName}}").css('text-align','{{this.fieldTextAlign}}');
+    $("#{{this.fieldName}}").css('width','{{this.fieldWidth}}px');
 
-
+    /*
     if('{{this.fieldTextAlign}}'=='center'){
         $("#{{this.fieldName}}").css('display','inline');
         $("#{{this.fieldName}}").css('left','16px');
@@ -371,7 +406,7 @@ $(document).ready(function(){
         $("#{{this.fieldName}}").css('position','absolute');
         $("#{{this.fieldName}}").css('width','557px');
     }
-    
+    */
 
 
 
