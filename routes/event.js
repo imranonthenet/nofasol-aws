@@ -572,7 +572,7 @@ router.get('/didnotattend/:id', function(req,res){
 
     var query = {_id:eventDataId};
     var currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
-    var update = {badgePrintDate:null, statusFlag:'Did Not Attend', username: req.user.email};
+    var update = {badgePrintDate:null,modifiedDate:null, statusFlag:'Did Not Attend', username: req.user.email};
     var options = {new:true};
 
     EventData.findOneAndUpdate(query, update, options, function(err, eventData){
@@ -659,11 +659,11 @@ router.get('/print-badge/:id', function(req,res){
                     var currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
                     
                     var update={};
-                    if(result.badgePrintDate==null || result.badgePrintDate==''){
+                    if(result.statusFlag!='Attended'){
                         update = {badgePrintDate:currentDate, statusFlag:'Attended', barcode:seq.value, username: req.user.email};
                     }
                     else {
-                        update = {modifiedDate:currentDate, statusFlag:'Attended', barcode:seq.value, username: req.user.email};
+                        update = {modifiedDate:currentDate, barcode:seq.value, username: req.user.email};
                     }
 
                     
@@ -683,11 +683,11 @@ router.get('/print-badge/:id', function(req,res){
                 var currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
 
                 var update={};
-                if(result.badgePrintDate==null || result.badgePrintDate==''){
+                if(result.statusFlag!='Attended'){
                     update = {badgePrintDate:currentDate, statusFlag:'Attended', username: req.user.email};
                 }
                 else {
-                    update = {modifiedDate:currentDate, statusFlag:'Attended', username: req.user.email};
+                    update = {modifiedDate:currentDate, username: req.user.email};
                 }
 
                 
@@ -796,7 +796,7 @@ router.post('/register', function (req, res) {
         if(req.body.save){
             eventData.statusFlag='Did Not Attend';
         }
-        else if(req.body.printAndSave || req.body.attendAndSave){ 
+        else if(req.body.attendAndSave){ 
             eventData.badgePrintDate = moment().format('YYYY-MM-DD HH:mm:ss');
             eventData.statusFlag = 'Attended';
         }
@@ -806,7 +806,7 @@ router.post('/register', function (req, res) {
         eventData.save(function(err, result){
             if(err) throw err;
 
-            if(req.body.save){
+            if(req.body.save || req.body.attendAndSave){
                 res.redirect('/event/registration/' + eventId);
             }
             else if(req.body.printAndSave){    
@@ -877,7 +877,7 @@ router.post('/edit-registration', function (req, res) {
             eventData.modifiedDate=moment().format('YYYY-MM-DD HH:mm:ss');
             
 
-            if(req.body.printAndSave || req.body.attendAndSave){ 
+            if(req.body.attendAndSave){ 
                 eventData.badgePrintDate = moment().format('YYYY-MM-DD HH:mm:ss');
                 eventData.statusFlag = 'Attended';
                 
@@ -888,7 +888,7 @@ router.post('/edit-registration', function (req, res) {
             eventData.save(function(err, result){
                 if(err) throw err;
     
-                if(req.body.save){
+                if(req.body.save || req.body.attendAndSave){
                     res.redirect('/event/registration/' + eventId);
                 }
                 else if(req.body.printAndSave){    
