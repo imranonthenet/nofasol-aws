@@ -2082,7 +2082,7 @@ router.get('/', function (req, res) {
         if (err)
             throw err;
 
-        res.render('event/index', { messages: messages, events: result, isAdmin:req.user.role=='admin' });
+        res.render('event/index', { messages: messages, events: result });
 
     })
 })
@@ -2284,7 +2284,7 @@ router.get('/registration/:id', function (req, res) {
         }
       
         req.session.eventLogo = event.eventLogo;
-        res.render('event/registration', { eventDataIdForPrint:eventDataIdForPrint, scripts:scripts, messages: messages, event: event, columns:columns, isAdmin:req.user.role=='admin' });
+        res.render('event/registration', { eventDataIdForPrint:eventDataIdForPrint, scripts:scripts, messages: messages, event: event, columns:columns });
 
     });
     

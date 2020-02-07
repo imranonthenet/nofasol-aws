@@ -227,6 +227,8 @@ app.use(function(req,res,next){
   res.locals.login = req.isAuthenticated();
   res.locals.session = req.session;
   res.locals.user = req.user;
+  res.locals.isAdmin = req.user.role=='admin';
+  
 
   if(cache.get('countries') && cache.get('badgeCategories')){
     res.locals.countries = cache.get('countries');
