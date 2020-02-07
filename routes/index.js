@@ -9,6 +9,7 @@ router.use(csrfProtection);
   router.get('/', function(req,res,next){
     var messages = req.flash('error');
     
+    req.session.eventLogo = 'nofa_solutions_logo.png';
       //if(req.isAuthenticated())
       //  res.redirect('/event');
       //else

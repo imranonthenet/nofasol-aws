@@ -17,8 +17,8 @@ router.get('/', function(req,res){
     .exec(function(err, data){
         if(err) throw err;
 
-        req.session.eventLogo = 'nofa_solutions_logo.png';
         
+
         res.render('user/index', {messages: messages, users:data});
         
     });
@@ -163,6 +163,9 @@ router.get('/profile', isLoggedIn ,function(req,res,next){
   });
 
   router.get('/logout',isLoggedIn ,function(req,res,next){
+
+    
+
     req.logout();
     res.redirect('/');
   });
