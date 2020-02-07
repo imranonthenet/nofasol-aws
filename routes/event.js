@@ -2082,7 +2082,7 @@ router.get('/', function (req, res) {
         if (err)
             throw err;
 
-        res.render('event/index', { messages: messages, events: result });
+        res.render('event/index', { messages: messages, events: result, isAdmin:req.user.role=='admin' });
 
     })
 })
