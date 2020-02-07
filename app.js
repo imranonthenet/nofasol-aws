@@ -228,7 +228,7 @@ app.use(function(req,res,next){
   res.locals.session = req.session;
   res.locals.user = req.user;
   
-  if(req.user.role != null)
+  if(req.user != null)
     res.locals.isAdmin = req.user.role=='admin';
 
 
