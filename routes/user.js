@@ -17,6 +17,8 @@ router.get('/', function(req,res){
     .exec(function(err, data){
         if(err) throw err;
 
+        req.session.eventLogo = 'nofa_solutions_logo.png';
+        
         res.render('user/index', {messages: messages, users:data});
         
     });
@@ -189,7 +191,7 @@ router.get('/signup', function(req,res,next){
   router.get('/signin', function(req,res,next){
     var messages = req.flash('error');
       req.session.eventLogo = 'nofa_solutions_logo.png';
-      
+
       res.render('user/signin', {csrfToken: req.csrfToken(), messages: messages, hasErrors: messages.length>0});
   })
   
