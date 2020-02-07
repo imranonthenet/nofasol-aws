@@ -188,7 +188,8 @@ router.get('/signup', function(req,res,next){
 
   router.get('/signin', function(req,res,next){
     var messages = req.flash('error');
-    
+      req.session.eventLogo = 'nofa_solutions_logo.png';
+      
       res.render('user/signin', {csrfToken: req.csrfToken(), messages: messages, hasErrors: messages.length>0});
   })
   
